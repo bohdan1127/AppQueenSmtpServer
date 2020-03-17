@@ -1,0 +1,63 @@
+{% extends '../layouts/dashboard.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    {% include "../partials/flash.html" %}
+    <div class="container card-body  col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2">
+        <form accept-charset="UTF-8" action="/admin/setting" method="POST" role="form">
+            <div class="card">
+                <div class="card-head style-primary">
+                    <header>Setting</header>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="open_limit_rate">Open Limit Rate</label>
+                        <input class="form-control" id="open_limit_rate" placeholder="Open Limit Rate" name="open_limit_rate" type="number" value="{{setting.open_limit_rate}}" autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label for="click_limit_rate">Click Limit Rate</label>
+                        <input class="form-control" id="click_limit_rate" placeholder="Open Limit Rate" name="click_limit_rate" type="number" value="{{setting.click_limit_rate}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="bounce_limit_rate">Bounce Limit Rate</label>
+                        <input class="form-control" id="bounce_limit_rate" placeholder="Bounce Limit Rate" name="bounce_limit_rate" type="number" value="{{setting.bounce_limit_rate}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="unsubscribe_limit_rate">Unsubscribe Limit Rate</label>
+                        <input class="form-control" id="unsubscribe_limit_rate" placeholder="Unsubscribe Limit Rate" name="unsubscribe_limit_rate" type="number" value="{{setting.unsubscribe_limit_rate}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="new_send_count">Email Review Count</label>
+                        <input class="form-control" id="new_send_count" placeholder="New User Sending Count" name="new_send_count" type="number" value="{{setting.new_send_count}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="emails_per_second">Emails Per Second</label>
+                        <input class="form-control" id="emails_per_second" placeholder="Emails Per Second" name="emails_per_second" type="number" value="{{setting.emails_per_second}}">
+                    </div>
+                    <div class="form-group" style="font-size: x-large">
+                        <input type="checkbox" id="send_open_link" name="send_open_link" {% if setting.send_open_link %} checked {% endif %} >
+                        <label class="custom-control-label" for="send_open_link">Send Open Link</label>
+                    </div>
+                    <div class="form-group" style="font-size: x-large">
+                        <input type="checkbox" id="send_click_link" name="send_click_link" {% if setting.send_click_link %} checked {% endif %} >
+                        <label class="custom-control-label" for="send_click_link">Send Click Link</label>
+                    </div>
+                    <div class="form-group" style="font-size: x-large">
+                        <input type="checkbox" id="send_unsubscribe_link" name="send_unsubscribe_link" {% if setting.send_unsubscribe_link %} checked {% endif %} >
+                        <label class="custom-control-label" for="send_unsubscribe_link">Send Unsubscribe Link</label>
+                    </div>
+                </div>
+                <div class="card-actionbar">
+                    <div class="card-actionbar-row">
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

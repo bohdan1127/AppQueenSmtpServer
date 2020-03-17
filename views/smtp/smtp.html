@@ -1,0 +1,60 @@
+{% extends '../layouts/dashboard.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+<div class="container-fluid container-max">
+  <div class="container card-body col-md-12 col-sm-12">
+    <form action="/user/generate_pwd" method="POST" class="form-horizontal">
+      <div class="card" style="padding: 20px;  border-radius: 5px; border-top: 2px solid rgb(10, 168, 158);">
+        <div class="col-md-12">
+          Information below to configure your SMTP client. Click generate smtp password button for SMTP password.
+        </div>
+        <div class="row">
+          <div class="col-md-3" style="margin-top: 20px;">
+            Host
+          </div>
+          <div class="col-md-9" style="margin-top: 20px; font-weight: bold;">
+            {{host}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3" style="margin-top: 20px;">
+            Port
+          </div>
+          <div class="col-md-9" style="margin-top: 20px; font-weight: bold;">
+            {{port}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3" style="margin-top: 20px;">
+            Encryption
+          </div>
+          <div class="col-md-9" style="margin-top: 20px; font-weight: bold;">
+            {% if encryption == 0 %} None {% endif %}
+            {% if encryption == 1 %} TLS {% endif %}
+            {% if encryption == 2 %} SSL {% endif %}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3" style="margin-top: 20px;">
+            Username
+          </div>
+          <div class="col-md-9" style="margin-top: 20px; font-weight: bold;">
+            {{username}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3" style="margin-top: 20px;">
+            Password
+          </div>
+          <div class="col-md-9" style="margin-top: 20px; font-weight: bold;">
+            {% if generated == true %} {{userpass}} {% endif %}<button type="submit" class="btn btn-primary">GENERATE SMTP PASSWORD </button>
+          </div>
+
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

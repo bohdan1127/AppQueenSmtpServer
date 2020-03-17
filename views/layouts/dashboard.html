@@ -1,0 +1,279 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Dashboard Title{% endblock %}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+<!--    <link href='http://fonts.googleapis.com/css?family=Roboto:300italic,400italic,300,400,500,700,900' rel='stylesheet' type='text/css'/>-->
+    <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap.css?1422792965" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/materialadmin.css?1425466319" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/font-awesome.min.css?1422529194" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/material-design-iconic-font.min.css?1421434286" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/libs/rickshaw/rickshaw.css?1422792967" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/libs/morris/morris.core.css?1420463396" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/jquery.dataTables.min.css" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap-multiselect.css"/>
+
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+    <script src="/javascripts/libs/jquery/jquery-1.11.2.min.js"></script>
+    <script src="/javascripts/libs/jquery/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/javascripts/libs/bootstrap/bootstrap.min.js"></script>
+    <script src="/javascripts/libs/bootstrap/bootstrap-multiselect.js"/>
+    <script src="/javascripts/libs/spin.js/spin.min.js"></script>
+    <script src="/javascripts/libs/autosize/jquery.autosize.min.js"></script>
+    <script src="/javascripts/jquery.dataTables.min.js"></script>
+    <script src="/javascripts/libs/moment/moment.min.js"></script>
+
+
+    <script src="/javascripts/core/source/App.js"></script>
+    <script src="/javascripts/core/source/AppNavigation.js"></script>
+
+
+
+
+  </head>
+  <body class="menubar-hoverable header-fixed menubar-first">
+    <header id="header" >
+        <div class="headerbar">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="headerbar-left">
+            <ul class="header-nav header-nav-options">
+              <li class="header-nav-brand" >
+                <div class="brand-holder">
+                  <a href='/dashboard'>
+                    <span class="text-lg text-bold text-primary"> <img src="/images/queensmtp.png" style="max-height: 29px"/> </span>
+                  </a>
+                </div>
+              </li>
+              <li>
+                <a class="btn btn-icon-toggle menubar-toggle" data-toggle="menubar" href="javascript:void(0);">
+                  <i class="fa fa-bars"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="headerbar-right">
+            <ul class="header-nav header-nav-options">
+              <li>
+                <!-- Search form -->
+                <form class="navbar-search" role="search">
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="headerSearch" placeholder="Enter your keyword">
+                  </div>
+                </form>
+              </li>
+              <li class="dropdown hidden-xs">
+                <ul class="dropdown-menu animation-expand">
+                  <li class="dropdown-header">Today's messages</li>
+                  <li>
+                    <a class="alert alert-callout alert-warning" href="javascript:void(0);">
+                      <img class="pull-right img-circle dropdown-avatar" src="/images/avatar2.png?1404026449" alt="" />
+                      <strong>Alex Anistor</strong><br/>
+                      <small>Testing functionality...</small>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="alert alert-callout alert-info" href="javascript:void(0);">
+                      <img class="pull-right img-circle dropdown-avatar" src="/images/avatar3.png?1404026799" alt="" />
+                      <strong>Alicia Adell</strong><br/>
+                      <small>Reviewing last changes...</small>
+                    </a>
+                  </li>
+                  <li class="dropdown-header">Options</li>
+                  <li><a href="../../html/pages/login.html">View all messages <span class="pull-right"><i class="fa fa-arrow-right"></i></span></a></li>
+                  <li><a href="../../html/pages/login.html">Mark as read <span class="pull-right"><i class="fa fa-arrow-right"></i></span></a></li>
+                </ul><!--end .dropdown-menu -->
+              </li><!--end .dropdown -->
+              <li class="dropdown hidden-xs">
+                <ul class="dropdown-menu animation-expand">
+                  <li class="dropdown-header">Server load</li>
+                  <li class="dropdown-progress">
+                    <a href="javascript:void(0);">
+                      <div class="dropdown-label">
+                        <span class="text-light">Server load <strong>Today</strong></span>
+                        <strong class="pull-right">93%</strong>
+                      </div>
+                      <div class="progress"><div class="progress-bar progress-bar-danger" style="width: 93%"></div></div>
+                    </a>
+                  </li><!--end .dropdown-progress -->
+                  <li class="dropdown-progress">
+                    <a href="javascript:void(0);">
+                      <div class="dropdown-label">
+                        <span class="text-light">Server load <strong>Yesterday</strong></span>
+                        <strong class="pull-right">30%</strong>
+                      </div>
+                      <div class="progress"><div class="progress-bar progress-bar-success" style="width: 30%"></div></div>
+                    </a>
+                  </li><!--end .dropdown-progress -->
+                  <li class="dropdown-progress">
+                    <a href="javascript:void(0);">
+                      <div class="dropdown-label">
+                        <span class="text-light">Server load <strong>Lastweek</strong></span>
+                        <strong class="pull-right">74%</strong>
+                      </div>
+                      <div class="progress"><div class="progress-bar progress-bar-warning" style="width: 74%"></div></div>
+                    </a>
+                  </li><!--end .dropdown-progress -->
+                </ul><!--end .dropdown-menu -->
+              </li><!--end .dropdown -->
+            </ul><!--end .header-nav-options -->
+            <ul class="header-nav header-nav-profile">
+              <li class="dropdown">
+                <a href="javascript:void(0);" class="dropdown-toggle ink-reaction" data-toggle="dropdown">
+                  <img src="/images/avatar1.png?1403934956" alt="" />
+                  <span class="profile-info">
+                                        {{user.profile_firstname}} {{user.profile_lastname}}
+                                        <small>{% if user.role == 1%}Administrator{% else %} User {% endif %}</small>
+                                    </span>
+                </a>
+                <ul class="dropdown-menu animation-dock">
+                  <li><a href="/profile">My profile</a></li>
+<!--                  <li><a href="../../html/pages/blog/post.html">My blog <span class="badge style-danger pull-right">16</span></a></li>-->
+<!--                  <li><a href="../../html/pages/calendar.html">My appointments</a></li>-->
+                  <li class="divider"></li>
+<!--                  <li><a href="../../html/pages/locked.html"><i class="fa fa-fw fa-lock"></i> Lock</a></li>-->
+                  <li><a href="/logout"><i class="fa fa-fw fa-power-off text-danger"></i> Logout</a></li>
+                </ul><!--end .dropdown-menu -->
+              </li><!--end .dropdown -->
+            </ul><!--end .header-nav-profile -->
+          </div><!--end #header-navbar-collapse -->
+        </div>
+      </header>
+    <!-- BEGIN OFFCANVAS LEFT -->
+    <div class="offcanvas">
+    </div><!--end .offcanvas-->
+    <!-- END OFFCANVAS LEFT -->
+    <!-- BEGIN BASE-->
+    <div id="base">
+      <!-- BEGIN MENUBAR-->
+      <div id="menubar" class="menubar-inverse ">
+        <div class="menubar-fixed-panel">
+          <div>
+            <a class="btn btn-icon-toggle btn-default menubar-toggle" data-toggle="menubar" href="javascript:void(0);">
+              <i class="fa fa-bars"></i>
+            </a>
+          </div>
+          <div class="expanded">
+            <a href="/dashboard">
+              <span class="text-lg text-bold text-primary "> QUEENSMTP.COM</span>
+            </a>
+          </div>
+        </div>
+        <div class="menubar-scroll-panel">
+          <!-- BEGIN MAIN MENU -->
+          <ul id="main-menu" class="gui-controls">
+            <!-- BEGIN DASHBOARD -->
+            {% if user.role == 1 %}
+            <li>
+              <a href="/admin/dashboard" {%if path == '/admin/dashboard'%}class="active"{%endif%}>
+              <div class="gui-icon"><i class="md md-home"></i></div>
+              <span class="title">Dashboard</span>
+              </a>
+            </li><!--end /menu-li -->
+            {% else %}
+            <li>
+              <a href="/dashboard" {%if path == '/dashboard'%}class="active"{%endif%}>
+              <div class="gui-icon"><i class="md md-home"></i></div>
+              <span class="title">Dashboard</span>
+              </a>
+            </li><!--end /menu-li -->
+            {% endif %}
+
+            <!-- END DASHBOARD -->
+
+            {% if user.role == 0 %}
+            <!-- BEGIN BILLING -->
+            <li>
+              <a href="/billing" {%if path == '/billing'%}class="active"{%endif%}>
+              <div class="gui-icon"><i class="md md-assessment"></i></div>
+              <span class="title">Billing</span>
+              </a>
+            </li><!--end /menu-li -->
+            {% endif %}
+            <!-- END BILLING -->
+            <!-- BEGIN PAGES -->
+            <li>
+              <a href="/domain/sending" {%if path == '/domain/sending'%}class="active"{%endif%}>
+                <div class="gui-icon"><i class="md md-domain"></i></div>
+                <span class="title">Add domain</span>
+              </a>
+            </li>
+            {% if user.role == 0 %}
+            <li>
+              <a href="/user/smtp" {%if path == '/user/smtp'%}class="active"{%endif%} >
+                <div class="gui-icon"><i class="md md-settings-input-composite"></i></div>
+                <span class="title">SMTP Configuration</span>
+              </a>
+            </li><!--end /menu-li -->
+            {% endif %}
+            {% if user.role == 1 %}
+            <!-- BEGIN RECORD -->
+            <li>
+              <a href="/record" {%if path == '/record'%}class="active"{%endif%}>
+                <div class="gui-icon"><i class="md md-security"></i></div>
+                <span class="title">Record</span>
+              </a>
+            </li><!--end /menu-li -->
+            <!-- END RECORD -->
+            <li>
+              <a href="/admin/users" {%if path == '/admin/users' || path.includes('/admin/user/detail') %}class="active"{%endif%}>
+                <div class="gui-icon"><i class="md md-perm-contact-cal"></i></div>
+                <span class="title">Users</span>
+              </a>
+            </li><!--end /menu-li -->
+            <li>
+              <a href="/admin/emails" {%if path == '/admin/emails'%}class="active"{%endif%}>
+              <div class="gui-icon"><i class="md md-mail"></i></div>
+              <span class="title">Emails</span>
+              </a>
+            </li><!--end /menu-li -->
+            <li>
+              <a href="/admin/smtp"  {%if path == '/admin/smtp'%}class="active"{%endif%} >
+                <div class="gui-icon"><i class="md md-settings-input-hdmi"></i></div>
+                <span class="title">External SMTP Servers</span>
+              </a>
+            </li><!--end /menu-li -->
+            <li>
+              <a href="/admin/setting" {%if path == '/admin/setting'%}class="active"{%endif%}>
+              <div class="gui-icon"><i class="md md-settings"></i></div>
+              <span class="title">Setting</span>
+              </a>
+            </li>
+            <!-- END RECORD -->
+            <li>
+              <a href="/admin/send/domain" {%if path == '/admin/send/domain'%}class="active"{%endif%}>
+              <div class="gui-icon"><i class="md md-send"></i></div>
+              <span class="title">Email Verify</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/admin/email/review" {%if path == '/admin/email/review'%}class="active"{%endif%}>
+              <div class="gui-icon"><i class="md md-rate-review"></i></div>
+              <span class="title">Review Emails</span>
+              </a>
+            </li>
+            {% endif %}
+
+          </ul><!--end .main-menu -->
+          <!-- END MAIN MENU -->
+          <div class="menubar-foot-panel">
+            <small class="no-linebreak hidden-folded">
+              <span class="opacity-75"></span>
+            </small>
+          </div>
+        </div><!--end .menubar-scroll-panel-->
+      </div><!--end #menubar-->
+      <!-- END MENUBAR -->
+      <div id="content">
+        {%- block content -%}{%- endblock-%}
+      </div>
+    </div>
+
+</body>
+
+</html>

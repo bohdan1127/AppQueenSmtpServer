@@ -1,0 +1,26 @@
+{% extends 'layouts/application.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+<div class="container-fluid container-max">
+  <div class="container card-body col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2">
+    <form action="/reset/{{token}}" method="POST">
+      <div class="card">
+        <div class="card-head style-primary">
+          <header>Reset Password</header>
+        </div>
+        <div class="card-body">
+          <p>New Password
+            <input type="password" name="password" class="form-control" placeholder="New Password" autofocus>
+          </p>
+          <p>Confirm Password
+            <input type="password" name="confirm" class="form-control" placeholder="Confirm Password">
+          </p>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Change Password</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

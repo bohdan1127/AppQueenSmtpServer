@@ -1,0 +1,182 @@
+{% extends '../layouts/dashboard.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+<style>
+  td{
+    max-width: 1px;
+    word-wrap: break-word;
+  }
+  td:nth-of-type(1){
+    border-top: 0px solid #ddd !important;
+  }
+  td:nth-of-type(2){
+    border-top: 0px solid #ddd !important;
+  }
+</style>
+  <div class="container">
+    <h1>{{domain.name}}</h1>
+  </div>
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <table class="table no-margin">
+          <thead>
+          <tr>
+            <th>Type</th>
+            <th>Host name</th>
+            <th>Enter this value</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>TXT</td>
+            <td>{{domain.name}}</td>
+            <td>
+              <h2>Replace with this value</h2>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>
+                {{record}}  <button onclick="onCopytoClipboard_spf()" ><i type="{{record}}" class="md-content-copy" id="id_spf"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>
+              <h3>
+                <p class="text-danger-new mt-2" style="color: red">
+                  Copy below code and replace the code to your  DNS record To update your DNS record can take some time <a href="https://queensmtp.com/dkim-spf-tutorial" target="_blank">Check Tutorial<a/>
+                </p>
+              </h3>
+              <button type="button" id="btn_verify_spf" class="btn btn-info btn-lg btn-block" id="btnVerifySpf" onclick="onClickSPFVerify('{{domain._id.toString()}}')" >Verify</button>
+            </td>
+          </tr>
+          <tr>
+            <td>TXT</td>
+            <td>{{domain.dkim_host_name}}</td>
+            <td>
+              {{domain.dkim_record}}  <button onclick="onCopytoClipboard_dkim()"><i type="{{domain.dkim_record}}" class="md-content-copy" id="id_dkim"></i></button>
+
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>
+              <h3>
+                <p class="text-danger-new mt-2" style="color: red">
+                  Copy above record and place it in your DNS settings.
+                </p>
+              </h3>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>
+              <button type="button" id="btn_verify" class="btn btn-info btn-lg btn-block" id="btnVerifyDKIM" onclick="onClickDKIMVerify('{{domain._id.toString()}}')" >Verify</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <form accept-charset="UTF-8" action="/domain/verify" method="POST" role="form" style="margin-bottom: 30px;">
+      <div class="form-group">
+        <input type="hidden" name="domain_id" class="form-group" value="{{domain._id.toString()}}"></input>
+      </div>
+    </form>
+  </div>
+<!-- Modal -->
+<div class="modal fade" id="myModal_spf" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="modal_body_spf">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal_dkim" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body" id="modal_body_dkim">
+        ...
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  let $body = document.getElementsByTagName('body')[0];
+  $('#myModal_spf').on('hidden.bs.modal', function () {
+    // do something…
+    // window.location.href = "./../sending";
+  });
+  $('#myModal_dkim').on('hidden.bs.modal', function () {
+    // do something…
+    // window.location.href = "./../sending";
+  });
+  function onCopytoClipboard_spf(){
+    let text = $('#id_spf').attr('type');
+    copytoclipboard(text);
+    $('#modal_body_spf').text('Copied to clipboard spf record');
+    $('#myModal_spf').modal();
+  }
+  function onCopytoClipboard_dkim(){
+    let text = $('#id_dkim').attr('type');
+    copytoclipboard(text);
+    $('#modal_body_dkim').text('Copied to clipboard dkim record');
+    $('#myModal_dkim').modal();
+  }
+  function copytoclipboard(text){
+    var $tempInput = document.createElement('INPUT');
+    $body.appendChild($tempInput);
+    $tempInput.setAttribute('value', text);
+    $tempInput.select();
+    document.execCommand('copy');
+    $body.removeChild($tempInput);
+  }
+  function onClickSPFVerify(id){
+    $.post('/domain/verify/spf',
+            {
+              domain_id : id
+            },
+            function(data, status){
+              $('#btnVerifySpf').disabled = data.success;
+              if (data.success == true){
+                $('#modal_body_spf').text(data.msg);
+                $('#myModal_spf').modal();
+              } else {
+                $('#modal_body_spf').text(data.error);
+                $('#myModal_spf').modal();
+              }
+            }
+    );
+  }
+  function onClickDKIMVerify(id){
+    $.post('/domain/verify/dkim',
+            {
+              domain_id : id
+            },
+            function(data, status){
+              $('#btnVerifyDKIM').disabled = data.success;
+              if (data.success == true){
+                $('#modal_body_dkim').text(data.msg);
+                $('#myModal_dkim').modal();
+              } else if (data.success == false){
+                $('#modal_body_dkim').text(data.error);
+                $('#myModal_dkim').modal();
+              }
+            }
+    );
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends '../layouts/dashboard.html' %}
+
+{% block title %}{{title}}{% endblock %}
+{% block content %}
+{% include "../partials/flash.html" %}
+<div class="container-fluid container-max">
+  <div class="container card-body  col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2">
+    <form accept-charset="UTF-8" action="/admin/send/domain/add" method="POST" role="form" style="margin-bottom: 30px;">
+      <div class="card">
+        <div class="card-head style-primary">
+          <header>Sending Domain</header>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <input class="form-control" id="domain" placeholder="Add new domain" name="domain" type="text" autofocus>
+          </div>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Add</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="container card-body col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
+
+    <div class="card">
+      <div class="card-head style-primary">
+        <header> Sending Domains You added.</header>
+      </div>
+      <div class="card-body" style="overflow-x:auto;">
+        <table class="table no-margin col-md-12" id="record_table">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Domain Name</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $('#record_table').DataTable( {
+    "serverSide": true,
+    "processing": true,
+    "paging": true,
+    "searching": true,
+    "lengthMenu": [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
+    bAutoWidth: true,
+    bFilter: false,
+    "ajax": {
+      "type": "POST",
+      "url": "/admin/send/domain",
+      "dataType": "json",
+      "contentType": 'application/json; charset=utf-8',
+      "data": function (data) {
+        // Grab form values containing user options
+        var form = {};
+        $.each($("form").serializeArray(), function (i, field) {
+          form[field.name] = field.value || "";
+        });
+        var info = { "start": 0, "length": data.length, "draw": 1 };
+        $.extend(form, data);
+        return JSON.stringify(form);
+      },
+      "complete": function(response) {
+
+      }
+    },
+    columns:[
+      {"data" : function(data, type, row, meta){
+                  return data._id.toString();
+        }},
+      {"data" : "name"},
+      { "data" : function(data, type, row, meta){
+          return "<form action=\"/admin/send/domain/delete\" method=\"post\">\n" +
+                  "          <input type=\"hidden\" value=\"" + data._id.toString() + "\" name=\"domain_id\">\n" +
+                  "          <button type=\"submit\" class=\"btn btn-primary\">Delete</button>\n" +
+                  "          </form>"
+        }
+      },
+    ]
+  } );
+</script>
+{% endblock %}

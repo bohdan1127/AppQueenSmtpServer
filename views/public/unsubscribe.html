@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Unsubscribe</title>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap.css?1422792965" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/materialadmin.css?1425466319" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/font-awesome.min.css?1422529194" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/material-design-iconic-font.min.css?1421434286" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/libs/rickshaw/rickshaw.css?1422792967" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/libs/morris/morris.core.css?1420463396" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/jquery.dataTables.min.css" />
+</head>
+<body>
+{% include "../partials/flash.html" %}
+<div class="container-fluid container-max">
+    <div class=" container card-body col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2">
+        <div class="card">
+            <div class="card-head style-primary">
+                <header>Subscribe</header>
+            </div>
+            <div class="card-body">
+                {% if unsubscribed %}
+                    <p>You are unsubscribed.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="/javascripts/libs/jquery/jquery-1.11.2.min.js"></script>
+<script src="/javascripts/libs/jquery/jquery-migrate-1.2.1.min.js"></script>
+<script src="/javascripts/libs/bootstrap/bootstrap.min.js"></script>
+</html>

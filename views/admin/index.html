@@ -1,0 +1,349 @@
+{% extends '../layouts/dashboard.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+<script src="/javascripts/libs/d3/d3.min.js"></script>
+<script src="/javascripts/libs/d3/d3.v3.js"></script>
+<script src="/javascripts/libs/rickshaw/rickshaw.min.js"></script>
+<script src="/javascripts/core/source/AppOffcanvas.js"></script>
+<script src="/javascripts/core/source/AppCard.js"></script>
+<script src="/javascripts/core/source/AppForm.js"></script>
+<script src="/javascripts/core/source/AppNavSearch.js"></script>
+<script src="/javascripts/core/source/AppVendor.js"></script>
+<script src="/javascripts/libs/flot/jquery.flot.min.js"></script>
+<script src="/javascripts/libs/flot/jquery.flot.time.min.js"></script>
+<script src="/javascripts/libs/flot/jquery.flot.resize.min.js"></script>
+<script src="/javascripts/libs/flot/jquery.flot.orderBars.js"></script>
+<script src="/javascripts/libs/flot/jquery.flot.pie.js"></script>
+<script src="/javascripts/libs/flot/curvedLines.js"></script>
+<script src="/javascripts/libs/jquery-knob/jquery.knob.min.js"></script>
+<script src="/javascripts/libs/sparkline/jquery.sparkline.min.js"></script>
+<script src="/javascripts/libs/nanoscroller/jquery.nanoscroller.min.js"></script>
+<section>
+  <div class="section-body">
+    <div class="row">
+      {% if (user.activate == false) %}
+      <div class="col-md-12">
+      <div class="card">
+        <div class="card-head card-outlined style-primary">
+          <header>
+            <i class="fa fa-fw fa-info-circle"></i>
+            Verify your email address
+          </header>
+        </div>
+        <div class="card-body text-default-light">
+          <p>Please click the link in the email we sent you to verify your email address and unlock higher daily sending limits.</p>
+          <br>
+          <button type="button" class="btn btn-info col-sm-2" id="btnResend" onclick="onClickEmailVerify('{{user._id.toString()}}')">Resend Email</button>
+        </div>
+      </div>
+      </div>
+      {% endif %}
+    </div>
+    <div class="row">
+
+      <!-- BEGIN ALERT - REVENUE -->
+      <div class="col-md-3 col-sm-6">
+        <div class="card">
+          <div class="card-body no-padding">
+            <div class="alert alert-callout alert-info no-margin">
+              <strong class="pull-right text-success text-lg"></strong>
+              <strong class="text-xl">{{d_totalCount}}</strong><br/>
+              <span class="opacity-50">Total Sent Today</span>
+            </div>
+          </div><!--end .card-body -->
+        </div><!--end .card -->
+      </div><!--end .col -->
+      <!-- END ALERT - REVENUE -->
+
+      <!-- BEGIN ALERT - VISITS -->
+      <div class="col-md-3 col-sm-6">
+        <div class="card">
+          <div class="card-body no-padding">
+            <div class="alert alert-callout alert-warning no-margin">
+              <strong class="pull-right text-warning text-lg"></strong>
+              <strong class="text-xl">{{d_open}}%</strong><br/>
+              <span class="opacity-50">Open Rate Today</span>
+            </div>
+          </div><!--end .card-body -->
+        </div><!--end .card -->
+      </div><!--end .col -->
+      <!-- END ALERT - VISITS -->
+
+
+
+      <!-- BEGIN ALERT - TIME ON SITE -->
+      <div class="col-md-3 col-sm-6">
+        <div class="card">
+          <div class="card-body no-padding">
+            <div class="alert alert-callout alert-success no-margin">
+              <h1 class="pull-right text-success"></h1>
+              <strong class="text-xl">{{d_click}}%</strong><br/>
+              <span class="opacity-50">Click Rate Today</span>
+
+            </div>
+          </div><!--end .card-body -->
+        </div><!--end .card -->
+      </div><!--end .col -->
+      <!-- END ALERT - TIME ON SITE -->
+      <!-- BEGIN ALERT - BOUNCE RATES -->
+      <div class="col-md-3 col-sm-6">
+        <div class="card">
+          <div class="card-body no-padding">
+            <div class="alert alert-callout alert-danger no-margin">
+              <strong class="pull-right text-danger text-lg"></strong>
+              <strong class="text-xl">{{d_bounce}}</strong><br/>
+              <span class="opacity-50">Bounce Today</span>
+<!--              <div class="stick-bottom-left-right">-->
+<!--                <div class="progress progress-hairline no-margin">-->
+<!--                  <div class="progress-bar progress-bar-danger" style="{{m_bounce}}%"></div>-->
+<!--                </div>-->
+<!--              </div>-->
+            </div>
+          </div><!--end .card-body -->
+        </div><!--end .card -->
+      </div><!--end .col -->
+      <!-- END ALERT - BOUNCE RATES -->
+    </div><!--end .row -->
+    <div class="row">
+
+      <!-- BEGIN SITE ACTIVITY -->
+      <div class="col-md-9">
+        <div class="card ">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="card-head">
+                <header>SMTP activity</header>
+              </div><!--end .card-head -->
+              <div class="card-body height-8">
+                <div id="flot-visitors-admin-legend" class="flot-legend-horizontal stick-top-right no-y-padding"></div>
+                <div id="flot-visitors-admin" class="flot height-7" data-title="Activity entry" data-color="#7dd8d2,#0aa89e"></div>
+              </div><!--end .card-body -->
+            </div><!--end .col -->
+            <div class="col-md-4">
+              <div class="card-head">
+                <header>Month's stats</header>
+              </div>
+              <div class="card-body height-8">
+                <strong>Total Sent:{{m_totalCount}}</strong>
+                <div class="progress progress-hairline">
+                  <div class="progress-bar progress-bar-primary-dark"></div>
+                </div>
+                Open Rate:{{m_open}}%
+                <span class="pull-right text-success text-sm"></span>
+                <div class="progress progress-hairline">
+                  <div class="progress-bar progress-bar-primary-dark" style="width:{{d_open}}%"></div>
+                </div>
+                Click Rate:{{m_click}}%
+                <span class="pull-right text-success text-sm"></span>
+                <div class="progress progress-hairline">
+                  <div class="progress-bar progress-bar-danger" style="width:{{d_click}}%"></div>
+                </div>
+                Bounce Count:{{m_bounce}}
+                <span class="pull-right text-danger text-sm"></i></span>
+                <div class="progress progress-hairline">
+                  <div class="progress-bar progress-bar-primary-dark" style="width:{{d_bounce}}"></div>
+                </div>
+              </div><!--end .card-body -->
+            </div><!--end .col -->
+          </div><!--end .row -->
+        </div><!--end .card -->
+      </div><!--end .col -->
+      <!-- END SITE ACTIVITY -->
+
+      <!-- BEGIN SERVER STATUS -->
+      <div class="col-md-3">
+        <div class="card">
+          <div class="card-head">
+            <header class="text-primary">Server status</header>
+          </div><!--end .card-head -->
+          <div class="card-body height-4">
+            <div class="pull-right text-center">
+              <em class="text-primary">Temperature</em>
+              <br/>
+              <div id="serverStatusKnob" class="knob knob-shadow knob-primary knob-body-track size-2">
+                <input type="text" class="dial" data-min="0" data-max="100" data-thickness=".09" value="50" data-readOnly=true>
+              </div>
+            </div>
+          </div><!--end .card-body -->
+          <div class="card-body height-4 no-padding">
+            <div class="stick-bottom-left-right">
+              <div id="rickshawGraph" class="height-4" data-color1="#0aa89e" data-color2="rgba(79, 89, 89, 0.2)"></div>
+            </div>
+          </div><!--end .card-body -->
+        </div><!--end .card -->
+      </div><!--end .col -->
+      <!-- END SERVER STATUS -->
+
+    </div><!--end .row -->
+
+  </div><!--end .section-body -->
+</section>
+
+<!--  <div class="container-fluid container-max">-->
+<!--    {% for plan in plans %}-->
+<!--      {% if user.stripe.plan == plan.name %}-->
+<!--        <div class="panel panel-default">-->
+<!--          <div class="panel-heading">{{plan.count}} emails/Month</div>-->
+<!--          <div class="panel-body">-->
+<!--            <p>Thanks for subscribing to {{plan.count}} emails/Month plan! Enjoy this free content!</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        {% else %}-->
+<!--        <div class="panel panel-default">-->
+<!--          <div class="panel-heading">{{plan.count}} emails/Month (<a href="/billing">Change to this plan</a>)</div>-->
+<!--        </div>-->
+<!--      {% endif %}-->
+<!--    {% endfor %}-->
+
+<!--    <div class="well">-->
+<!--      <p>Debug Info:</p>-->
+<!--      <ul>-->
+<!--        <li>Does this user have a plan? {% if _.has(plans, user.stripe.plan) %}YES{% else %}NOPE{% endif %}</li>-->
+<!--        <li>Does this user have paid plan? {% if _.contains(['silver','gold','platinum'], user.stripe.plan) %}YES{% else %}NOPE{% endif %}</li>-->
+<!--      </ul>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!-- BEGIN SIMPLE MODAL MARKUP -->
+<div class="modal fade" id="simpleModal" tabindex="-1" role="dialog" aria-labelledby="simpleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body" id="modal_body">
+        <p>Do you want to save changes?</p>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- END SIMPLE MODAL MARKUP -->
+
+<script>
+  // var points = [20, 10, 25, 15, 30, 20, 30, 10, 15, 10, 20, 25, 25, 15, 20, 25, 10, 67, 10, 20, 25, 15, 25, 97, 10, 30, 10, 38, 20, 15, 82, 44, 20, 25, 20, 10, 20, 38];
+  //
+  // materialadmin.App.callOnResize(function () {
+  //   var options = $('.sparkline-revenue').data();
+  //   options.type = 'line';
+  //   options.width = '100%';
+  //   options.height = $('.sparkline-revenue').height() + 'px';
+  //   options.fillColor = false;
+  //   $('.sparkline-revenue').sparkline(points, options);
+  // });
+
+  function onClickEmailVerify(userid){
+    // $('#simpleModal').modal();
+    console.log('clickemailverify');
+    document.getElementById('btnResend').disabled = true;
+    $('#btnResend').text('Sending...');
+    $.post('/user/send_email_verify',
+            {
+              user_id : userid
+            },
+            function(data, status){
+              document.getElementById('btnResend').disabled = false;
+              $('#btnResend').text('Resend Email');
+              if (data.success == true){
+                $('#modal_body').text('Success to send email verification.');
+                $('#simpleModal').modal();
+              } else {
+                $('#modal_body').text('Failed to send email verification.');
+                $('#simpleModal').modal();
+              }
+            }
+    );
+
+  }
+  $.post('/admin/dashboard', {}, res =>{
+    console.log(res);
+    var o = this;
+    var chart = $("#flot-visitors-admin");
+
+    // Elements check
+    if (!$.isFunction($.fn.plot) || chart.length === 0) {
+      return;
+    }
+
+    var data = [
+      {
+        label: 'Open Rate',
+        data: res.open_counts,
+        last: true
+      },
+      {
+        label: 'Email Send',
+        data: res.sent_counts,
+        last: true
+      }
+    ];
+
+    // Chart options
+    var labelColor = chart.css('color');
+    var options = {
+      colors: chart.data('color').split(','),
+      series: {
+        shadowSize: 0,
+        lines: {
+          show: true,
+          lineWidth: false,
+          fill: true
+        },
+        curvedLines: {
+          apply: true,
+          active: true,
+          monotonicFit: false
+        }
+      },
+      legend: {
+        container: $('#flot-visitors-admin-legend')
+      },
+      xaxis: {
+        mode: "time",
+        timeformat: "%d %b",
+        font: {color: labelColor}
+      },
+      yaxis: {
+        font: {color: labelColor}
+      },
+      grid: {
+        borderWidth: 0,
+        color: labelColor,
+        hoverable: true
+      }
+    };
+    chart.width('100%');
+
+    // Create chart
+    var plot = $.plot(chart, data, options);
+
+    // Hover function
+    var tip, previousPoint = null;
+    chart.bind("plothover", function (event, pos, item) {
+      if (item) {
+        if (previousPoint !== item.dataIndex) {
+          previousPoint = item.dataIndex;
+
+          var x = item.datapoint[0];
+          var y = item.datapoint[1];
+          var tipLabel = '<strong>' + $(this).data('title') + '</strong>';
+          var tipContent = Math.round(y) + " " + item.series.label.toLowerCase() + " on " + moment(x).format('dddd');
+
+          if (tip !== undefined) {
+            $(tip).popover('destroy');
+          }
+          tip = $('<div></div>').appendTo('body').css({left: item.pageX, top: item.pageY - 5, position: 'absolute'});
+          tip.popover({html: true, title: tipLabel, content: tipContent, placement: 'top'}).popover('show');
+        }
+      }
+      else {
+        if (tip !== undefined) {
+          $(tip).popover('destroy');
+        }
+        previousPoint = null;
+      }
+    });
+  });
+</script>
+<script src="/javascripts/core/demo/Demo.js"></script>
+<script src="/javascripts/core/demo/DemoDashboard.js"></script>
+
+{% endblock %}

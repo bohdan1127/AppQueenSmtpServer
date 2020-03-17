@@ -1,0 +1,348 @@
+{% extends './../layouts/dashboard.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+  <div>
+    <h3>External Servers</h3>
+  </div>
+  {% include "../partials/flash.html" %}
+  <div class="container card-body  col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2">
+    <form accept-charset="UTF-8" action="/admin/smtp/add" method="POST" role="form">
+      <div class="card">
+        <div class="card-head style-primary">
+          <header>Host Info</header>
+        </div>
+        <input type="hidden" name = "id" value="{{form.id}}">
+        <div class="card-body">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input class="form-control" id="name" placeholder="Name" name="name" type="text" value="{{form.name}}" autofocus>
+          </div>
+          <div class="form-group">
+            <label for="name">Domain</label>
+            <input class="form-control" id="domain" placeholder="Domain" name="domain" type="text" value="{{form.domain}}" autofocus>
+          </div>
+
+          <div class="form-group">
+            <label for="host">Host</label>
+            <input class="form-control" id="host" placeholder="Host" name="host" type="text" value="{{form.host}}" autofocus>
+          </div>
+
+          <div class="form-group">
+            <label for="port">Port</label>
+            <input class="form-control" id="port" placeholder="Port" name="port" type="text" value="{{form.port}}">
+          </div>
+          <div class="form-group">
+            <label for="encryption">Encryption</label>
+            <select id="encryption" name="encryption" value="{{form.encryption}}" class="form-control">
+              <option value="0" class="dedicated">None</option>
+              <option value="1" >SSL</option>
+              <option value="2">TLS</option>
+            </select>
+
+          </div>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input class="form-control" id="username" placeholder="Username" name="username" type="text" value="{{form.username}}">
+          </div>
+
+          <div class="form-group">
+            <label for="userpass">Userpass</label>
+            <input class="form-control" id="userpass" placeholder="Userpass" name="userpass" type="text" value="{{form.userpass}}">
+          </div>
+
+          <div class="form-group">
+            <label for="daily_count">Daily Limit Count</label>
+            <input class="form-control" id="daily_count" placeholder="Daily Limit Count"  name="daily_count" type="number" value="{{form.daily_count}}">
+          </div>
+          <div class="form-group">
+            <label for="monthly_count">Monthly Limit Count</label>
+            <input class="form-control" id="monthly_count" placeholder="Monthly Limit Count" name="monthly_count" type="number" value="{{form.monthly_count}}">
+          </div>
+
+          <div class="form-group" style="font-size: x-large">
+            <input type="checkbox" id="defaultUnchecked" name="is_trial" {% if form.is_trial %} checked {% endif %} >
+            <label class="custom-control-label" for="defaultUnchecked">IS TRIAL</label>
+          </div>
+
+          <div class="form-group" style="font-size: x-large">
+            <input type="checkbox" id="active_status" name="status" {% if form.status %} checked {% endif %} >
+            <label class="custom-control-label" for="defaultUnchecked">Active</label>
+          </div>
+
+        </div>
+        <div class="card-actionbar">
+          <div class="card-actionbar-row">
+            <button class="btn btn-lg btn-primary btn-block" type="submit">{% if form.id == "" %}Add{% else %} Edit {% endif %}</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="container card-body col-md-12 col-sm-12">
+    <div class="card">
+      <div class="card-head style-primary">
+        <header>Servers.</header>
+      </div>
+      <div class="card">
+        <div class="card-body" style="overflow-x:auto;">
+          <table id="user_table" class="display" style="width:100%">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Domain</th>
+              <th>Host</th>
+              <th>Port</th>
+              <th>DKIM Verified</th>
+              <th>DKIM</th>
+              <th>Encryption</th>
+              <th>Username</th>
+              <th>DailyCount</th>
+              <th>MonthlyCount</th>
+              <th>IS TRIAL</th>
+              <th>ActiveStatus</th>
+              <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  &lt;!&ndash; BEGIN SIMPLE MODAL MARKUP &ndash;&gt;-->
+  <!--  <div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="simpleModalLabel" aria-hidden="true">-->
+  <!--    <div class="modal-dialog">-->
+  <!--      <div class="modal-content">-->
+  <!--        <div class="modal-header">-->
+  <!--          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+  <!--          <h4 class="modal-title" id="edit_modal_header">Add New External Smtp Server</h4>-->
+  <!--        </div>-->
+
+
+  <!--        <form accept-charset="UTF-8" action="/admin/smtp/add" method="POST" role="form">-->
+  <!--          <div class="modal-body">-->
+  <!--            <input type="hidden" name = "id" value="{{form.id}}">-->
+  <!--            <div class="form-group">-->
+  <!--              <label for="name">Name</label>-->
+  <!--              <input class="form-control" id="name" placeholder="Name" name="name" type="text" value="{{form.name}}" autofocus>-->
+  <!--            </div>-->
+
+  <!--            <div class="form-group">-->
+  <!--              <label for="host">Host</label>-->
+  <!--              <input class="form-control" id="host" placeholder="Host" name="host" type="text" value="{{form.host}}" autofocus>-->
+  <!--            </div>-->
+
+  <!--            <div class="form-group">-->
+  <!--              <label for="port">Port</label>-->
+  <!--              <input class="form-control" id="port" placeholder="Port" name="port" type="text" value="{{form.port}}">-->
+  <!--            </div>-->
+  <!--            <div class="form-group">-->
+  <!--              <label for="encryption">Encryption</label>-->
+  <!--              <select id="encryption" name="encryption" value="{{form.encryption}}" class="form-control">-->
+  <!--                <option value="0" class="dedicated">None</option>-->
+  <!--                <option value="1" >SSL</option>-->
+  <!--                <option value="2">TLS</option>-->
+  <!--              </select>-->
+
+  <!--            </div>-->
+  <!--            <div class="form-group">-->
+  <!--              <label for="username">Username</label>-->
+  <!--              <input class="form-control" id="username" placeholder="Username" name="username" type="text" value="{{form.username}}">-->
+  <!--            </div>-->
+
+  <!--            <div class="form-group">-->
+  <!--              <label for="userpass">Userpass</label>-->
+  <!--              <input class="form-control" id="userpass" placeholder="Userpass" name="userpass" type="text" value="{{form.userpass}}">-->
+  <!--            </div>-->
+
+  <!--            <div class="form-group">-->
+  <!--              <label for="daily_count">Daily Limit Count</label>-->
+  <!--              <input class="form-control" id="daily_count" placeholder="Daily Limit Count"  name="daily_count" type="number" value="{{form.daily_count}}">-->
+  <!--            </div>-->
+  <!--            <div class="form-group">-->
+  <!--              <label for="monthly_count">Monthly Limit Count</label>-->
+  <!--              <input class="form-control" id="monthly_count" placeholder="Monthly Limit Count" name="monthly_count" type="number" value="{{form.monthly_count}}">-->
+  <!--            </div>-->
+
+  <!--            <div class="form-group" style="font-size: x-large">-->
+  <!--              <input type="checkbox" id="defaultUnchecked" name="is_trial" {% if form.is_trial %} checked {% endif %} >-->
+  <!--              <label class="custom-control-label" for="defaultUnchecked">IS TRIAL</label>-->
+  <!--            </div>-->
+  <!--            <div class="form-group" style="font-size: x-large">-->
+  <!--              <button class="btn btn-lg btn-primary btn-block" type="submit">{% if form.id == "" %}Add{% else %} Edit {% endif %}</button>-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--        </form>-->
+
+  <!--      </div>&lt;!&ndash; /.modal-content &ndash;&gt;-->
+  <!--    </div>&lt;!&ndash; /.modal-dialog &ndash;&gt;-->
+  <!--  </div>&lt;!&ndash; /.modal &ndash;&gt;-->
+  <!--  &lt;!&ndash; END SIMPLE MODAL MARKUP &ndash;&gt;-->
+  <div class="modal fade" id="myModal_dkim" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body" id="modal_body_dkim">
+          ...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  let $body = document.getElementsByTagName('body')[0];
+  $("body").click(function(e){
+    if ($(e.target).hasClass('btn_edit')){
+      let id = $(e.target).attr('id');
+      console.log(id);
+      $.post('/admin/smtp/getbyid',
+              {
+                smtpid : id
+              },
+              function(data, status){
+                if (data.success == true){
+                  console.log(data.data);
+                  let smtp = data.data;
+                  $('#edit_modal').modal();
+
+                }
+                else {
+                  //TODO
+                }
+              }
+      );
+
+    }
+
+  });
+  function onCopytoClipboard_dkim(id){
+    console.log('clicked');
+    let text = $('#id_dkim_'+id).attr('type');
+    copytoclipboard(text);
+    $('#modal_body_dkim').text('Copied to clipboard dkim record');
+    $('#myModal_dkim').modal();
+  }
+  function copytoclipboard(text){
+    var $tempInput = document.createElement('INPUT');
+    $body.appendChild($tempInput);
+    $tempInput.setAttribute('value', text);
+    $tempInput.select();
+    document.execCommand('copy');
+    $body.removeChild($tempInput);
+  }
+  function onClickDKIMVerify(id){
+    $.post('/admin/smtp/domain/verify/dkim',
+            {
+              smtpserver_id : id
+            },
+            function(data, status){
+              $('#btnVerifyDKIM').disabled = data.success;
+              if (data.success == true){
+                // $('#modal_body_dkim').text(data.msg);
+                // $('#myModal_dkim').modal();
+                window.location.reload();
+              } else if (data.success == false){
+                $('#modal_body_dkim').text(data.error);
+                $('#myModal_dkim').modal();
+              }
+            }
+    );
+  }
+  $('#user_table').DataTable( {
+    "serverSide": true,
+    "processing": true,
+    "paging": true,
+    "searching": true,
+    "lengthMenu": [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
+    bAutoWidth: true,
+    bFilter: false,
+    "ajax": {
+      "type": "POST",
+      "url": "/admin/smtp",
+      "dataType": "json",
+      "contentType": 'application/json; charset=utf-8',
+      "data": function (data) {
+        // Grab form values containing user options
+        var form = {};
+        $.each($("form").serializeArray(), function (i, field) {
+          form[field.name] = field.value || "";
+        });
+        var info = { "start": 0, "length": data.length, "draw": 1 };
+        $.extend(form, data);
+        return JSON.stringify(form);
+      },
+      "complete": function(response) {
+        console.log('Finished getting.');
+      }
+    },
+    columns: [
+      {"data" : "name"},
+      {"data" : "domain"},
+      {"data" : "host"},
+      {"data" : "port"},
+      {"data" : function(data, type, row, meta){
+          if (data.dkim_verified){
+            return "Verified"
+          } else {
+            return "<button type=\"button\" id=\"btn_verify\" class=\"btn btn-info btn-lg btn-block\" id=\"btnVerifyDKIM\" onclick=\"onClickDKIMVerify('"+ data._id.toString() + "')\" >VerifyDKIM</button>"
+          }
+        }},
+      {"data" : function(data, type, row, meta){
+          return "<button onclick=\"onCopytoClipboard_dkim('"+ data._id.toString() +"')\"><i type=\""+ data.dkim_record + "\" class=\"md-content-copy\" id=\"id_dkim_"+data._id.toString()+"\"></i></button>"
+        }},
+      {"data" : function(data, type, row, meta){
+          if (data.encryption == 0){
+            return 'None';
+          } else if (data.encryption == 1){
+            return 'SSL';
+          } else if (data.encryption == 2){
+            return 'TLS'
+          }
+        }},
+      {"data" : "username"},
+      {"data" : "daily_count"},
+      {"data" : "monthly_count"},
+      {"data" : function(data, type, row, meta){
+          if (data.is_trial){
+            return "TRIAL";
+          }
+          else
+            return "";
+        }},
+      {"data" : function(data, type, row, meta){
+          if (data.status != undefined && data.status){
+            return "Active";
+          }
+          else
+            return "De-active";
+        }},
+      { "data" : function(data, type, row, meta){
+          return "                <form action=\"/admin/smtp/del\" method=\"post\">\n" +
+                  "                  <input type=\"hidden\" value=" + data._id.toString() +" name=\"smtp_id\"\>\n" +
+                  "                  <button type='button' class=\"btn btn-primary\"><a href='/admin/smtp_edit/"+data._id.toString()+"'>" +
+                  " <i class=\"md-mode-edit\"></i></button>\n" +
+                  "                  <button type=\"submit\" class=\"btn btn-primary\">" +
+                  " <i class=\"md-delete\"></i></button>\n" +
+                  "                </form>"
+        }
+      }
+      // { "data" : function(data, type, row, meta){
+      //     return "                <form action=\"/admin/smtp/del\" method=\"post\">\n" +
+      //             "                  <input type=\"hidden\" value=" + data._id.toString() +" name=\"smtp_id\"\>\n" +
+      //             "                  <button type='button' id=" + data._id.toString()+" class=\"btn btn-primary btn_edit\">" +
+      //             " <i class=\"md-mode-edit\"></i></button>\n" +
+      //             "                  <button type=\"submit\" class=\"btn btn-primary\">" +
+      //             " <i class=\"md-delete\"></i></button>\n" +
+      //             "                </form>"
+      //   }
+      // }
+    ]
+  } );
+
+</script>
+{% endblock %}

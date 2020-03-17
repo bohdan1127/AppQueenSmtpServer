@@ -1,0 +1,42 @@
+{% extends 'layouts/application.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+<div id="content container-fluid">
+  <section>
+    <div class="section-body">
+      <div class="container">
+        <h2 class="text-light text-center">Plans & pricing<br/></h2>
+        <br/>
+        <!-- BEGIN PRICING CARDS 2 -->
+        <div class="row">
+          {% for plan in plans %}
+           <div class="col-md-4">
+            <div class="card card-type-pricing">
+              <div class="card-body text-center style-gray">
+                <div class="price">
+                  <span class="text-lg">{{ plan.currency}}</span><h2><span class="text-xxxl">{{plan.price}}</span></h2> <span>/month</span>
+                </div>
+                <br/>
+                <p class="opacity-50"><em></em></p>
+              </div><!--end .card-body -->
+              <div class="card-body no-padding">
+                <ul class="list-unstyled text-left">
+                  <li>{% if plan.id == 0 %} {{ plan.count }} free Emails {% else %} {{ plan.count }} emails per month {% endif %}</li>
+                  <li>24/7 Customer Support</li>
+                  <li>Dedicated delivery expert</li>
+                </ul>
+              </div><!--end .card-body -->
+              <div class="card-body">
+                <a class="btn btn-default" href="/signup/{{plan.name}}">Sign up</a>
+              </div><!--end .card-body -->
+            </div><!--end .card -->
+          </div><!--end .col -->
+          {% endfor %}
+        </div><!--end .row -->
+      </div><!--end .container -->
+    </div><!--end .section-body -->
+  </section>
+</div><!--end #content-->
+{% endblock %}

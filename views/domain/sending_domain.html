@@ -1,0 +1,170 @@
+{% extends '../layouts/dashboard.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+<div class="container-fluid container-max">
+  <div class=" container card-body col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2">
+    <form accept-charset="UTF-8" action="/domain/add" method="POST" role="form" style="margin-bottom: 30px;">
+    <div class="card">
+      <div class="card-head style-primary">
+        <header>Sending Domains</header>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <input class="form-control" id="domain" placeholder="Add a new domain" name="domain" type="text" value="{{form.domain}}" autofocus>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Add</button>
+      </div>
+    </div>
+    </form>
+  </div>
+</div>
+{% include "../partials/flash.html" %}
+<div class="container card-body col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
+  <div class="card">
+    <div class="card-head style-primary">
+      <header>Domains You added</header>
+    </div>
+    <div class="card-body" style="overflow-x:auto;">
+      <table class="table no-margin col-md-12" id="domain_table">
+        <thead>
+        <tr>
+          <th>Domain Name</th>
+          <th>SPF Verification</th>
+          <th>DKIM Verification</th>
+          <th>Email Verified</th>
+          {% if user.role == 1 %}
+          <th>User email</th>
+          {% else %}
+          <th></th>
+          {% endif %}
+          <th>Action</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script>
+  let is_admin = {{user.role}};
+  console.log(is_admin);
+  let columns = [
+    {"data" : "name"},
+    {"data" : function(data, type, row, meta){
+          if (data.type == 0){
+            return data.spf_verified;
+          } else {
+            return "";
+          }
+      }},
+    {"data" : function(data, type, row, meta){
+        if (data.type == 0){
+          return data.dkim_verified;
+        } else {
+          return "";
+        }
+      }},
+    {"data" : function(data, type, row, meta){
+        if (data.type == 1){
+          return data.email_verified
+        } else {
+          return "";
+        }
+      }},
+    {"data" : function(data, type, row, meta){
+        if (data.userid != undefined && data.userid._id != undefined)
+          return data.userid.email;
+        else
+          return "";
+      }},
+    { "data" : function(data, type, row, meta){
+        if (data.type == 0){
+          return "<a href=\"/domain/detail/" + data._id.toString() + "\">View Settings</a>"
+        }
+        else if (data.type == 1){
+          if (data.email_verified != undefined && data.email_verified == true)
+            return "Email Verified";
+          else
+                return "<form action=\"/domain/verify/email/resend\" method=\"post\">\n" +
+                        "              <input type=\"hidden\" value=\""+data._id.toString()+"\" name=\"domain_id\">\n" +
+                        "              <button type=\"submit\" class=\"btn btn-primary\">Resend</button>\n" +
+                        "            </form>"
+        }
+      }
+    },
+    { "data" : function(data, type, row, meta){
+      if (is_admin == 1)
+      {
+        return "<form action=\"/domain/delete\" method=\"post\">\n" +
+                "              <input type=\"hidden\" value=\""+data._id.toString()+"\" name=\"domain_id\">\n" +
+                "              <button type=\"submit\" class=\"btn btn-primary\">Delete</button>\n" +
+                "            </form>";
+      }
+      else
+      {
+        return ""
+      }
+
+
+      }
+    },
+  ];
+
+  $('#domain_table').DataTable( {
+    "serverSide": true,
+    "processing": true,
+    "paging": true,
+    "searching": true,
+    "lengthMenu": [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
+    bAutoWidth: true,
+    bFilter: false,
+    "ajax": {
+      "type": "POST",
+      "url": "/domain/list",
+      "dataType": "json",
+      "contentType": 'application/json; charset=utf-8',
+      "data": function (data) {
+        // Grab form values containing user options
+        var form = {};
+        $.each($("form").serializeArray(), function (i, field) {
+          form[field.name] = field.value || "";
+        });
+        var info = { "start": 0, "length": data.length, "draw": 1 };
+        $.extend(form, data);
+        return JSON.stringify(form);
+      },
+      "complete": function(response) {
+        let data = response.responseText;
+        let object = JSON.parse(data);
+        if (object != undefined && object.role != undefined){
+          let role = object.role;
+          if (role == 1){
+            columns = [
+              {
+                "title": "spf_verified",
+                "data" : "name"
+              },
+              {"data" : "spf_verified"},
+              {"data" : "dkim_verified"},
+              {"data": function(data, type, row, meta){
+                  return data.userid.email;
+                }},
+              { "data" : function(data, type, row, meta){
+                  return "<a href=\"/domain/detail/" + data._id.toString() + "\">View Settings</a>"
+              }
+              },
+
+            ];
+          }
+        }
+        console.log('Finished getting.' + object.role);
+      }
+    },
+    columns:  columns
+  } );
+</script>
+{% endblock %}

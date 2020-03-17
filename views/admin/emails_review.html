@@ -1,0 +1,155 @@
+{% extends '../layouts/dashboard.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+{% include "../partials/flash.html" %}
+<div class="container-fluid container-max">
+    <div class="container card-body" style="width:100%">
+        <div class="card">
+            <div class="card-head style-primary">
+                <header>Reviewed Emails</header>
+            </div>
+            <div class="card-body" style="overflow-x:auto;">
+                <table class="table no-margin col-md-12" id="user_table">
+                    <thead>
+                    <tr>
+                        <th>UserEmail</th>
+                        <th>FromEmail</th>
+                        <th>FromName</th>
+                        <th>toAddr</th>
+                        <th>Date</th>
+                        <th>Subject</th>
+                        <th>Body</th>
+                        <th>SentDate</th>
+                        <th>Log</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myShowBody" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 100%">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="modalBody" style="overflow-x: auto">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("body").click(function(e){
+        if ($(e.target).hasClass('btn_view')){
+            let id = $(e.target).attr('id');
+            console.log(id);
+            let div_id = "div_" + id;
+            let div_id_1 = '#' + div_id;
+            let div_text = $(div_id_1).html();
+            console.log(div_text);
+            $('#modalBody').html(div_text);
+            $('#myShowBody').modal();
+        }
+
+    });
+    $('#user_table').DataTable( {
+        "serverSide": true,
+        "processing": true,
+        "paging": true,
+        "searching": true,
+        "lengthMenu": [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
+        bAutoWidth: true,
+        bFilter: false,
+        "ajax": {
+            "type": "POST",
+            "url": "/admin/email/review",
+            "dataType": "json",
+            "contentType": 'application/json; charset=utf-8',
+            "data": function (data) {
+                // Grab form values containing user options
+                var form = {};
+                $.each($("form").serializeArray(), function (i, field) {
+                    form[field.name] = field.value || "";
+                });
+                var info = { "start": 0, "length": data.length, "draw": 1 };
+                $.extend(form, data);
+                return JSON.stringify(form);
+            },
+            "complete": function(response) {
+                console.log('Finished getting.');
+            }
+        },
+        columns: [
+            {"data" : function(data, type, row, meta){
+                    return data.userid.email;
+                }},
+            {"data" : function(data, type, row, meta){
+                    return data.from.address;
+                }},
+            {"data" : function(data, type, row, meta){
+                    return data.from.name;
+                }},
+            {"data" : function(data, type, row, meta){
+                    let ret = "";
+                    for (let i = 0; i < data.destaddr.length; i++){
+                        let to_addr = data.destaddr[i];
+                        let email = to_addr.to.name + ':' + to_addr.to.address;
+                        ret = ret + email + ' ';
+                    }
+                    return ret;
+                }},
+            {"data" : function(data, type, row, meta) {
+                let date = Date.parse(data.date);
+                return formatDate(date);
+                }},
+            {"data" : "subject"},
+            {"data" :  function(data, type, row, meta){
+                    return '<div style="display: none;" id="div_'+ data._id.toString() + '">'+ data.body_html+ '</div><button type="button" class="btn-primary btn_view" id="' + data._id.toString() +  '">ViewEmail</button>';
+            }},
+            {"data" : "receive_date"},
+            {"data" : "log"},
+            {"data": function(data, type, row, meta){
+                    return "<form action=\"/admin/email/review/active\" method=\"post\">\n" +
+                        "              <input type=\"hidden\" value=\""+data._id.toString()+"\" name=\"email_id\">\n" +
+                        "          <button type=\"submit\" class=\"btn btn-primary\">Active</button>\n" +
+                        "          </form>";
+            }},
+        ]
+    } );
+    function padValue(value) {
+        return (value < 10) ? "0" + value : value;
+    }
+    function formatDate(dateVal) {
+        var mDate = new Date(dateVal);
+        var newDate = new Date(mDate.getTime() );
+
+        var sMonth = padValue(newDate.getMonth() + 1);
+        var sDay = padValue(newDate.getDate());
+        var sYear = newDate.getFullYear();
+        var sHour = newDate.getHours();
+        var sMinute = padValue(newDate.getMinutes());
+        var sSecond = newDate.getSeconds();
+        var sAMPM = "AM";
+
+        var iHourCheck = parseInt(sHour);
+
+        if (iHourCheck > 12) {
+            sAMPM = "PM";
+            sHour = iHourCheck - 12;
+        }
+        else if (iHourCheck === 0) {
+            sHour = "12";
+        }
+
+        sHour = padValue(sHour);
+
+        return sMonth + "-" + sDay + "-" + sYear + " " + sHour + ":" + sMinute + ":" + padValue(sSecond) + " " + sAMPM;
+    }
+</script>
+{% endblock %}

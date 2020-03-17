@@ -1,0 +1,57 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Default Title{% endblock %}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+<!--    <link href='http://fonts.googleapis.com/css?family=Roboto:300italic,400italic,300,400,500,700,900' rel='stylesheet' type='text/css'/>-->
+    <link type="text/css" rel="stylesheet" href="/stylesheets/bootstrap.css?1422792965" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/materialadmin.css?1425466319" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/font-awesome.min.css?1422529194" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/material-design-iconic-font.min.css?1421434286" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/libs/rickshaw/rickshaw.css?1422792967" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/libs/morris/morris.core.css?1420463396" />
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="container-fluid container-wide">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"  data-target="#my-nav-bar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="navbar-collapse collapse" id="my-nav-bar">
+          <ul class="nav navbar-nav">
+            <li><a href="https://queensmtp.com"><img src="/images/queensmtp.png" style="max-height: 29px"/></a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+<!--            <li {%if path == '/signin'%}class="active"{%endif%}><a href="/signin">Login</a></li>-->
+<!--            <li {%if path == '/signup/free'%}class="active"{%endif%}><a href="/signup/free">Create Account</a></li>-->
+            <li><a href="/signin">Login</a></li>
+            <li><a href="/signup/free">Create Account</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    {% include "../partials/flash.html" %}
+    {%- block content -%}{%- endblock-%}
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+    <script>
+     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+     ga('create', '{{googleAnalytics}}');
+     ga('send', 'pageview');
+    </script>
+    <script src="/javascripts/jquery.min.js"></script>
+    <script src="/javascripts/libs/bootstrap/bootstrap.js"/>
+    <script src="/javascripts/app.js"></script>
+</body>
+</html>

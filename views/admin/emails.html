@@ -1,0 +1,219 @@
+{% extends '../layouts/dashboard.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid container-max">
+    <div class="container card-body" style="width:100%">
+        <div class="card">
+            <div class="card-head style-primary">
+                <header>Emails</header>
+            </div>
+            <div class="card-body" style="overflow-x:auto;">
+                <table class="table no-margin col-md-12" id="user_table">
+                    <thead>
+                    <tr>
+                        <th>UserEmail</th>
+                        <th>FromEmail</th>
+                        <th>FromName</th>
+                        <th>toAddr</th>
+                        <th>Date</th>
+                        <th>Subject</th>
+                        <th>Body</th>
+                        <th>SentDate</th>
+                        <th>Attachments</th>
+                        <th>Status</th>
+                        <th>Log</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Modal -->
+<style>
+    #modalBody img{
+        width: 100%;
+    }
+</style>
+
+<div class="modal fade" id="myShowBody" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 100%">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="modalBody" style="overflow-x: auto">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("body").click(function(e){
+        if ($(e.target).hasClass('btn_view')){
+            let id = $(e.target).attr('id');
+            console.log(id);
+            let div_id = "div_" + id;
+            let div_id_1 = '#' + div_id;
+            let div_text = $(div_id_1).html();
+            console.log(div_text);
+            $.post('/admin/email/body',
+                {
+                    id : div_text
+                },
+                function(data, status) {
+                    console.log('body = ', data);
+                    if (data.success == true) {
+
+                        $('#modalBody').html(data.msg);
+                        $('#myShowBody').modal();
+                    }
+                }
+            )
+
+        }
+
+    });
+    $('#user_table').DataTable( {
+        "serverSide": true,
+        "processing": true,
+        "paging": true,
+        "searching": true,
+        "lengthMenu": [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
+        bAutoWidth: true,
+        bFilter: false,
+        "ajax": {
+            "type": "POST",
+            "url": "/admin/emails",
+            "dataType": "json",
+            "contentType": 'application/json; charset=utf-8',
+            "data": function (data) {
+                // Grab form values containing user options
+                var form = {};
+                $.each($("form").serializeArray(), function (i, field) {
+                    form[field.name] = field.value || "";
+                });
+                var info = { "start": 0, "length": data.length, "draw": 1 };
+                $.extend(form, data);
+                return JSON.stringify(form);
+            },
+            "complete": function(response) {
+                console.log('Finished getting.');
+            }
+        },
+        columns: [
+            {"data" : function(data, type, row, meta){
+                    return data.userid.email;
+                }},
+            {"data" : function(data, type, row, meta){
+                    return data.from.address;
+                }},
+            {"data" : function(data, type, row, meta){
+                    return data.from.name;
+                }},
+            {"data" : function(data, type, row, meta){
+                    let ret = "";
+                    for (let i = 0; i < data.destaddr.length; i++){
+                        let to_addr = data.destaddr[i];
+                        let email = to_addr.to.name + ':' + to_addr.to.address;
+                        ret = ret + email + ' ';
+                    }
+                    return ret;
+                }},
+            {"data" : function(data, type, row, meta) {
+                let date = Date.parse(data.date);
+                return formatDate(date);
+                }},
+            {"data" : "subject"},
+            {"data" :  function(data, type, row, meta){
+                    // return '<div style="display: none;" id="div_'+ data._id.toString() + '">'+ data.html_content+ '</div><button type="button" class="btn-primary btn_view" id="' + data._id.toString() +  '">ViewEmail</button>';
+                    return '<div style="display: none;" id="div_'+ data._id.toString() + '">'+ data._id.toString()+ '</div><button type="button" class="btn-primary btn_view" id="' + data._id.toString() +  '">ViewEmail</button>';
+            }},
+            {"data" : "receive_date"},
+
+            {"data" : function(data, type, row, meta){
+                let attachments = [];
+                for (let i = 0; i < data.attachments.length; i++){
+                    let to_addr = data.attachments[i];
+                    attachments.push(to_addr.filename);
+                }
+                return JSON.stringify(attachments);
+            }},
+            {"data": function(data, type, row, meta){
+                let html = "";
+                if (data.open_status == 1)
+                    html += "<p style=' background-color:#FA0; border-radius:5px; text-align: center'>Opened</p>";
+                if (data.click_status == 1)
+                    html += "<p style=' background-color:#0c84e4; border-radius:5px; text-align: center'>Clicked</p>";
+                if (data.bounce_status == 1)
+                    html += "<p style=' background-color:#8a6d3b; border-radius:5px; text-align: center'>Bounced</p>";
+                if (data.unsubscribe_status == 1)
+                    html += "<p style=' background-color:#e11b0c; border-radius:5px; text-align: center'>Unsubscribed</p>";
+                if (data.report_status == 1)
+                    html += "<p style=' background-color:#45e64a; border-radius:5px; text-align: center'>Reported</p>";
+
+                if (data.sent == 1){
+                    html += "<p style=' background-color:#3d8b40; border-radius:5px; text-align: center'>Successfully Sent</p>";
+                } else if (data.sent == 0){
+                    html += "<p style=' background-color:#45e64a; border-radius:5px; text-align: center'>Queued</p>";
+                }  else if (data.sent == 3){
+                    html += "<p style=' background-color:#e11b0c; border-radius:5px; text-align: center'>Sending Error</p>";
+                } else if (data.sent == 4){
+                    html += "<p style=' background-color:#ff00cc; border-radius:5px; text-align: center'>No Smtp Server</p>";
+                }else if (data.sent == 5){
+                    html += "<p style=' background-color:#0c84e4; border-radius:5px; text-align: center'>Hourly Limited</p>";
+                }else if (data.sent == 6){
+                    html += "<p style=' background-color:#0b76cc; border-radius:5px; text-align: center'>Daily Limited</p>";
+                }else if (data.sent == 8){
+                    html += "<p style=' background-color:#00B7FF; border-radius:5px; text-align: center'>Not User Active</p>";
+                }else if (data.sent == 7){
+                    html += "<p style=' background-color:#e11b0c; border-radius:5px; text-align: center'>Not Paid</p>";
+                }else if (data.sent == 9) {
+                    html += "<p style=' background-color:#e11b0c; border-radius:5px; text-align: center'>User Limited</p>";
+                }
+                return html;
+            }},
+            {"data": function(data, type, row, meta){
+                console.log(data.log);
+                if (data.log == undefined){
+                    return "";
+                }
+                return data.log;
+            }
+            },
+        ]
+    } );
+    function padValue(value) {
+        return (value < 10) ? "0" + value : value;
+    }
+    function formatDate(dateVal) {
+        var mDate = new Date(dateVal);
+        var newDate = new Date(mDate.getTime() );
+
+        var sMonth = padValue(newDate.getMonth() + 1);
+        var sDay = padValue(newDate.getDate());
+        var sYear = newDate.getFullYear();
+        var sHour = newDate.getHours();
+        var sMinute = padValue(newDate.getMinutes());
+        var sSecond = newDate.getSeconds();
+        var sAMPM = "AM";
+
+        var iHourCheck = parseInt(sHour);
+
+        if (iHourCheck > 12) {
+            sAMPM = "PM";
+            sHour = iHourCheck - 12;
+        }
+        else if (iHourCheck === 0) {
+            sHour = "12";
+        }
+
+        sHour = padValue(sHour);
+
+        return sMonth + "-" + sDay + "-" + sYear + " " + sHour + ":" + sMinute + ":" + padValue(sSecond) + " " + sAMPM;
+    }
+</script>
+{% endblock %}
