@@ -3,7 +3,12 @@ module.exports = {
   db: process.env.MONGODB || process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost:27017/smtp_server',
 
   sessionSecret: process.env.SESSION_SECRET || 'change this',
-  
+
+  mail_api_endpoint : 'https://send.queensmtp.com/api/v1/customers/package',
+  mail_api_username : 'admin@queensmtp.com',
+  mail_api_password: 'admin1122',
+  mail_api_token : 'rEvQAIqzAGEJkjEyHcKARXfkZbKHkAAZzSbgpx2z3RppQ1PUetvetk7pigRp',
+
   mailgun: {
     apiKey: process.env.MAILGUN_API_KEY || '',
     domain: process.env.MAILGUN_DOMAIN || ''

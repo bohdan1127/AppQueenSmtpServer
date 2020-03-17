@@ -10,6 +10,7 @@ const { to , ReE , ReS} = require('./../utils/util');
 let plans = User.getPlans();
 let Count = require('../models/count');
 let AccessAddress = require('../models/access_address');
+let request1 = require('./../controllers/request');
 
 module.exports = function(passport){
 
@@ -230,6 +231,7 @@ module.exports = function(passport){
                             req.session.touch();
                             return done(null, user, req.flash('success', 'Thanks for signing up!!'));
                             */
+                            callApi(saved, req.body.password);
                             let err_fs, data_fs;
                             let filePath = path.join(__dirname, '../public/html/verification.html');
                             fs.readFile(filePath, {encoding: 'utf-8'}, function(err, data){
@@ -295,4 +297,37 @@ function getNameFromEmail(email){
         return substr.replace('>', '').replace('<', '');
     }
     return '';
+}
+
+async function callApi(user, pwd)
+{
+    let link = Secrets.mail_api_endpoint + "?";
+    link += "email=" + user.email;
+    link += "&first_name=" + user.profile_firstname;
+    link += "&last_name=" + user.profile_lastname;
+    link += "&password=" + pwd;
+    link += "&plan_id=5";
+    link += "&host=smtp.queensmtp.com";
+    link += "&smtp_username=" + user.smtp_username;
+    link += "&smtp_password=" + user.smtp_userpass;
+    link += "&smtp_port=" + 465;
+    link += "&smtp_protocol=ssl";
+    link += "&default_from_email=";
+    link += "&quota_value=100000";
+    link += "&quota_base=100";
+    link += "&quota_unit=hour";
+    request1.post(link)
+    // let { error, response, body } = await request1.post(link);
+    // if (error)
+    // {
+    //     return "error";
+    // }
+    // if (body.status == "success" )
+    // {
+    //     return true;
+    // }
+    // else
+    // {
+    //     return false
+    // }
 }
