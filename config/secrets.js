@@ -4,8 +4,8 @@ module.exports = {
 
   sessionSecret: process.env.SESSION_SECRET || 'change this',
 
-  // mail_api_endpoint : 'https://send.queensmtp.com/api/v1/customers/package',
-  mail_api_endpoint : 'https://send.queensmtp.com/api/v1/customers',
+  mail_api_endpoint : 'https://send.queensmtp.com/api/v1/customers/package',
+  // mail_api_endpoint : 'https://send.queensmtp.com/api/v1/customers',
   mail_api_username : 'admin@queensmtp.com',
   mail_api_password: 'admin1122',
   mail_api_token : 'rEvQAIqzAGEJkjEyHcKARXfkZbKHkAAZzSbgpx2z3RppQ1PUetvetk7pigRp',
@@ -30,9 +30,9 @@ module.exports = {
     auth_pass : '(l)p(yE_QJv1',
   },
   virtual_min: {
-    link: "https://root:Gd80A0FKE9z03Womwk@rnsm.net:10000/virtual-server/remote.cgi",
+    link: "https://root:(^$*8o4K^6RPD#@rnsm.net:10000/virtual-server/remote.cgi",
     id: "root",
-    pwd: "Gd80A0FKE9z03Womwk"
+    pwd: "(^$*8o4K^6RPD#"
   },
   // bounce_email : 'testbounce@queensmtp.com',
   // bounce_email : 'bounce@kilagbe.com',

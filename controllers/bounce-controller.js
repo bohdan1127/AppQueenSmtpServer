@@ -15,6 +15,8 @@ let request1 = require('./request');
 exports.createUserDomain = async function(username, passwd, domain) {
     let link = Secrets.virtual_min.link + "?program=create-user&domain="+ domain + "&user=" + username + "&json=1" + "&pass=" + passwd;
     // let link = Secrets.virtual_min.link + "?program=create-user&domain="+ domain + "&user=" + username + "&json=1" + "&encpass=E6C9268F2C8A2BD00E7AD265E69F8431";
+    let password = encodeURIComponent(Secrets.virtual_min.pwd);
+    link = link.replace(Secrets.virtual_min.pwd, password);
     let { error, response, body } = await request1.get(link);
     if (error)
     {
@@ -33,8 +35,9 @@ exports.createUserDomain = async function(username, passwd, domain) {
 exports.existUserDomain = async function(username, domain){
     let link = Secrets.virtual_min.link + "?program=list-users&domain="+ domain + "&user=" + username + "&json=1";
 
+    let password = encodeURIComponent(Secrets.virtual_min.pwd);
+    link = link.replace(Secrets.virtual_min.pwd, password);
     let { error, response, body } = await request1.get(link);
-
     if (error)
     {
         return "error";

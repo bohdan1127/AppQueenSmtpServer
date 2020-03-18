@@ -257,7 +257,7 @@ const send_email = async () => {
                                         bounce.startImap();
                                     }
                                 }
-                            } else {
+                            } else if (ret != "error"){
                                 let bounce = new BounceEmail({userid: user._id, smtpserver_id: smtpserver._id, email_id: bounce_username, email_pwd: bounce_pwd, domain: smtpserver.domain});
                                 let saved;
                                 [error, saved] = await to (bounce.save());
