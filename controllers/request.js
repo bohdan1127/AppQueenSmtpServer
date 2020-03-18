@@ -11,8 +11,14 @@ async function get (url) {
 }
 
 async function post (url, data) {
+    var options = {
+        method: 'post',
+        body: data,
+        json: true,
+        url: url
+    }
     return new Promise((resolve, reject) => {
-        request({ url, method: 'POST', data }, (error, response, body) => {
+        request({ url: url, method: 'POST', body: data, json: true}, (error, response, body) => {
             if (error) return reject(error);
 
             return resolve({ body, response });

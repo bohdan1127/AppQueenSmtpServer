@@ -87,6 +87,22 @@ var userSchema = new mongoose.Schema({
   ip_address: {
     type: String,
     default:"",
+  },
+  mail_api_token: {
+    type:String,
+    default: "",
+  },
+  mail_customer_id: {
+    type: String,
+    default: ""
+  },
+  mail_status:{
+    type: Number,
+    default: 0
+  },
+  mail_message: {
+    type: String,
+    default: ""
   }
 });
 userSchema.virtual('destsmtps', {

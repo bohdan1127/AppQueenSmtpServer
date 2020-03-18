@@ -301,33 +301,40 @@ function getNameFromEmail(email){
 
 async function callApi(user, pwd)
 {
-    let link = Secrets.mail_api_endpoint + "?";
-    link += "email=" + user.email;
-    link += "&first_name=" + user.profile_firstname;
-    link += "&last_name=" + user.profile_lastname;
-    link += "&password=" + pwd;
-    link += "&plan_id=5";
-    link += "&host=smtp.queensmtp.com";
-    link += "&smtp_username=" + user.smtp_username;
-    link += "&smtp_password=" + user.smtp_userpass;
-    link += "&smtp_port=" + 465;
-    link += "&smtp_protocol=ssl";
-    link += "&default_from_email=";
-    link += "&quota_value=100000";
-    link += "&quota_base=100";
-    link += "&quota_unit=hour";
-    request1.post(link)
-    // let { error, response, body } = await request1.post(link);
-    // if (error)
-    // {
-    //     return "error";
-    // }
-    // if (body.status == "success" )
-    // {
-    //     return true;
-    // }
-    // else
-    // {
-    //     return false
-    // }
+    let link = Secrets.mail_api_endpoint ;
+    let data = {
+        api_token: Secrets.mail_api_token,
+        email: user.email,
+        first_name: user.profile_firstname,
+        last_name: user.profile_lastname,
+        password: pwd,
+        plan_id:"5",
+        host:"smtp.queensmtp.com",
+        smtp_username:user.smtp_username,
+        smtp_userpass:user.smtp_userpass,
+        smtp_port: 465,
+        default_from_email: "",
+        quota_value: 100000,
+        quota_base: 100,
+        quota_unit:"hour"
+    };
+
+    let { error, response, body } = await request1.post(link ,data);
+    if (error)
+    {
+
+    }
+    if (body.status == 1 )
+    {
+        user.mail_customer_id = body.customer_uid;
+        user.mail_api_token = body.api_token;
+        user.mail_status = body.status;
+        user.mail_message = body.message;
+        let error, saved;
+        [error, saved] = await to (user.save())
+    }
+    else
+    {
+        return false
+    }
 }

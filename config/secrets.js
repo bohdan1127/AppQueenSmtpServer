@@ -4,10 +4,12 @@ module.exports = {
 
   sessionSecret: process.env.SESSION_SECRET || 'change this',
 
-  mail_api_endpoint : 'https://send.queensmtp.com/api/v1/customers/package',
+  // mail_api_endpoint : 'https://send.queensmtp.com/api/v1/customers/package',
+  mail_api_endpoint : 'https://send.queensmtp.com/api/v1/customers',
   mail_api_username : 'admin@queensmtp.com',
   mail_api_password: 'admin1122',
   mail_api_token : 'rEvQAIqzAGEJkjEyHcKARXfkZbKHkAAZzSbgpx2z3RppQ1PUetvetk7pigRp',
+
 
   mailgun: {
     apiKey: process.env.MAILGUN_API_KEY || '',

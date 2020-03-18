@@ -16,6 +16,7 @@ let Bounces = require('../controllers/bounce-controller');
 let iMapBounce = require('../smtp/imap');
 var verifier = require('email-verify');
 var infoCodes = verifier.infoCodes;
+let Generator = require('generate-password');
 
 let emailCheck = require('email-check');
 const nodemailer = require('nodemailer');
@@ -193,7 +194,10 @@ const send_email = async () => {
                         let b_error, b_bounce;
                         // let bounce_username = "bounce-" + user._id.toString() + "@" + smtpserver.domain;
                         let bounce_username = "bounce-" + user._id.toString() ;
-                        let bounce_pwd = "password";
+                        let bounce_pwd = Generator.generate({
+                            length: 10, numbers: true
+                        });
+
                         [b_error, b_bounce] = await to (BounceEmail.findOne({smtpserver_id: smtpserver._id, userid: email.userid, email_id: bounce_username}));
                         if (b_bounce)
                         {
