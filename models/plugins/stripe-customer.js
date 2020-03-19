@@ -124,7 +124,7 @@ module.exports = exports = function stripeCustomer (schema, options) {
           htmldata = htmldata.replace('https://example.com/', Secrets.server_host_address);
           console.log(htmldata);
           mailer.sendEmail({
-            from : '"QUEEN SMTP" <info@queensmtp.com>',
+            from : '"QUEENSMTP.COM" <info@queensmtp.com>',
             to : [{ address: user.email, name:""}],
             subject: 'Order Confirmation',
             html : htmldata
