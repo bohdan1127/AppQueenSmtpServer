@@ -272,7 +272,7 @@ exports.getDomainDetail = async function(req, res, next){
         htmldata = htmldata.replace('http://localhost:3000/images', Secrets.server_host_address + '/images');
         let mailerror, mailinfo;
         [mailerror, mailinfo] = await (mailer.sendEmail({
-            from : '"QUEEN SMTP" <info@queensmtp.com>',
+            from : '"QUEENSMTP.COM" <info@queensmtp.com>',
             to : [{ address: domain.name, name:""}],
             subject: 'Please verify your email address',
             html : htmldata
