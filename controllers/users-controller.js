@@ -369,7 +369,7 @@ exports.sendSuspendEmail = async function(user){
       htmldata = htmldata.replace('http://localhost:3000/images', Secrets.server_host_address + '/images');
 
       mailer.sendEmail({
-        from : '"QUEEN SMTP" <info@queensmtp.com>',
+        from : '"QUEENSMTP.COM" <info@queensmtp.com>',
         to : [{ address: user.email, name:""}],
         subject: 'You Account is Suspend Contact Us to Active',
         html : htmldata
@@ -389,7 +389,7 @@ exports.sendReviewEmail = async function(user){
       htmldata = htmldata.replace('http://localhost:3000/images', Secrets.server_host_address + '/images');
 
       mailer.sendEmail({
-        from : '"QUEEN SMTP" <info@queensmtp.com>',
+        from : '"QUEENSMTP.COM" <info@queensmtp.com>',
         to : [{ address: user.email, name:""}],
         subject: 'You Account is Under Review Contact Us to Active',
         html : htmldata
@@ -431,7 +431,7 @@ exports.postSendEmailToVerify = async function(req, res, next){
             htmldata = htmldata.replace('http://localhost:3000/images', Secrets.server_host_address + '/images');
 
             mailer.sendEmail({
-              from : '"QUEEN SMTP" <info@queensmtp.com>',
+              from : '"QUEENSMTP.COM" <info@queensmtp.com>',
               to : [{ address: email, name:""}],
               subject: 'Thank You for Sign Up QUEENSMTP.COM',
               html : htmldata
