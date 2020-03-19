@@ -25,27 +25,22 @@
 {% include "./partials/flash.html" %}
 <div class="container-fluid container-max" style="background-color: #FFF; height: 100%;">
   <div class="header-fixed">
-    <h3>Billings</h3>
   </div>
   <div class="row">
     <div class="row col-md-6 col-md-offset-3 col-sm-12">
       <div style="display:flex; flex-direction: row; padding: 20px">
-        <div style="flex: 1">
-          <img src="/images/norton.jpg" style="width: 100%;padding: 2%; position: relative; align-content: center; top: 50%; transform: translateY(-50%); "/>
-        </div>
+
         <div style="flex: 2">
           <a href="/dashboard"><img src="/images/queensmtp.png" style="width: 100%;padding: 2%; position: relative; align-content: center; top: 50%; transform: translateY(-50%); "/></a>
         </div>
-        <div style="flex: 1">
-          <img src="/images/seal2.png" style="width: 100%;padding: 2%; position: relative; align-content: center; top: 50%; transform: translateY(-50%); "/>
-        </div>
+
       </div>
 
       <div class="container card-body col-md-12" >
         <form {% if !user.stripe.last4 %}id="cardForm"{% endif %} action="/user/signup/billing" method="POST" class="form-horizontal">
           <div class="card">
             <div class="card-head style-primary" style="margin: 10px">
-              <header>SUBSCRIPTION WILL BE MIDEL</header>
+              <header>SUBSCRIPTION</header>
             </div>
             <div class="card-body">
               <div id="cardWrapper">
@@ -54,6 +49,7 @@
                   <p style="text-align: center; font-size: 15px; color: #e11b0c">
                   Secure Transaction by 128-bit industry leading SSL encryption. Don’t worry, you are safe here.
                 </p>
+                <hr>
                 </div>
                 <div class="form-group">
                   <label class="col-sm-3 control-label">Card Number</label>
@@ -101,7 +97,6 @@
           <form action="/users/billing/plan/free" method="POST">
             <input type="hidden" value="free" name="plan"/>
             <div class="form-group">
-              <button type="submit" class="btn-primary" style=" width: 100%">Start With Free</button>
             </div>
           </form>
         </div>
