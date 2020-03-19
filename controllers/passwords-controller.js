@@ -121,7 +121,7 @@ exports.postForgotPassword = function(req, res, next){
             htmldata = htmldata.replace('Hello,', mHelloStr);
             console.log(htmldata);
             mailer.sendEmail({
-              from : '"QUEEN SMTP" <info@queensmtp.com>',
+              from : '"QUEENSMTP.COM" <info@queensmtp.com>',
               to : req.body.email,
               subject: 'Reset your password on QUEENSMTP.COM',
               html: htmldata
