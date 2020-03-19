@@ -79,7 +79,7 @@ module.exports = function(passport){
 
                                             console.log(htmldata);
                                             mailer.sendEmail({
-                                                from : '"QUEEN SMTP" <info@queensmtp.com>',
+                                                from : '"QUEENSMTP.COM" <info@queensmtp.com>',
                                                 to : [{ address: req.body.email, name:""}],
                                                 subject: 'Suspicious activity verify email address to login your account.',
                                                 html : htmldata
@@ -255,7 +255,7 @@ module.exports = function(passport){
 
                                             console.log(htmldata);
                                             mailer.sendEmail({
-                                                from : '"QUEEN SMTP" <info@queensmtp.com>',
+                                                from : '"QUEENSMTP.COM" <info@queensmtp.com>',
                                                 to : [{ address: req.body.email, name:""}],
                                                 subject: 'Thank You for Sign Up QUEENSMTP.COM',
                                                 html : htmldata
