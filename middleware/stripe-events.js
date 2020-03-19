@@ -56,7 +56,7 @@ var knownEvents = {
           htmldata = htmldata.replace('http://example.com/price', amount + " USD");
           console.log(htmldata);
           mailer.sendEmail({
-            from : '"QUEEN SMTP" <info@queensmtp.com>',
+            from : '"QUEENSMTP.COM" <info@queensmtp.com>',
             to : [{ address: user.email, name:""}],
             subject: 'Order Confirmation',
             html : htmldata
@@ -94,7 +94,7 @@ var knownEvents = {
           htmldata = htmldata.replace('Woodrow Nikolaus', 'Hello,' + user.profile_firstname);
           console.log(htmldata);
           mailer.sendEmail({
-            from : '"QUEEN SMTP" <info@queensmtp.com>',
+            from : '"QUEENSMTP.COM" <info@queensmtp.com>',
             to : [{ address: user.email, name:""}],
             subject: 'Order Failed',
             html : htmldata
@@ -237,7 +237,7 @@ var knownEvents = {
           htmldata = htmldata.replace('http://example.com/price', amount + " USD");
           console.log(htmldata);
           mailer.sendEmail({
-            from : '"QUEEN SMTP" <info@queensmtp.com>',
+            from : '"QUEENSMTP.COM" <info@queensmtp.com>',
             to : [{ address: user.email, name:""}],
             subject: 'Order Confirmation',
             html : htmldata
