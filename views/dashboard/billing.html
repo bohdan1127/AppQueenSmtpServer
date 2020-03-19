@@ -21,7 +21,7 @@
                 <label>
                   <input type="radio" {% if user.stripe.plan == loop.key and user.subscription == 1 or plan.id == 0%}checked{% endif %} name="plan" value="{{loop.key}}" data-toggle="radio">
                   {%if plan.name == "free" %}
-                  <span>Free_6000_Emails - ${{plan.price}}/M</span>
+                  <span>Free_15000_Emails - ${{plan.price}}/M</span>
                   {% else %}
                   <span>{{plan.count}}_Emails - ${{plan.price}}/M</span>
                   {% endif %}
