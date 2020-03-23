@@ -39,6 +39,7 @@ const server = new SMTPServer({
     logger: true,
 
     secure: true,
+    STARTTLS: false,
 
     // not required but nice-to-have
     banner: 'Welcome to My Awesome SMTP Server',
