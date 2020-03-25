@@ -44,7 +44,7 @@ const server = new SMTPServer({
     banner: 'Welcome to My Awesome SMTP Server',
 
     // disable STARTTLS to allow authentication in clear text mode
-    //disabledCommands: ['AUTH', 'STARTTLS'],
+    disabledCommands: ['AUTH', 'STARTTLS'],
 
     // By default only PLAIN and LOGIN are enabled
     authMethods: ['PLAIN', 'LOGIN', 'CRAM-MD5'],
