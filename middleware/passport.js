@@ -308,7 +308,7 @@ async function callApi(user, pwd)
         first_name: user.profile_firstname,
         last_name: user.profile_lastname,
         password: pwd,
-        plan_id:"5",
+        plan_id:"8",
         host:"smtp.queensmtp.com",
         smtp_username:user.smtp_username,
         smtp_userpass:user.smtp_userpass,
