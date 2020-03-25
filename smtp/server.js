@@ -4,6 +4,7 @@
 const SMTPServer = require('smtp-server').SMTPServer;
 const SERVER_HOST = false;
 const nodemailer = require('nodemailer');
+let fs = require('fs');
 let SendDomain = require('../models/senddomain');
 let User = require('../models/user');
 let Redirect = require('../models/redirect');
@@ -39,8 +40,9 @@ const server = new SMTPServer({
     logger: true,
 
     secure: true,
-    STARTTLS: false,
-
+    key: fs.readFileSync("cert.key"),
+    cert: fs.readFileSync("app_queensmtp_com.crt"),
+    
     // not required but nice-to-have
     banner: 'Welcome to My Awesome SMTP Server',
 
