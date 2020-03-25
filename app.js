@@ -114,7 +114,7 @@ if (app.get('env') === 'development') {
 }
 
 let server =require('./smtp/server');
-let server =require('./smtp/server-non-secure');
+let server1 =require('./smtp/server-non-secure');
 
 // let imap =require('./smtp/imap');
 let cron = require('./cron/send');
