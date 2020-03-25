@@ -38,8 +38,7 @@ const server = new SMTPServer({
     // log to console
     logger: true,
 
-    secure: true,
-    STARTTLS: false,
+    secure: false,
 
     // not required but nice-to-have
     banner: 'Welcome to My Awesome SMTP Server',
@@ -397,4 +396,4 @@ server.on('error', err => {
 });
 
 // start listening
-server.listen(Secrets.my_smtp_options.port, SERVER_HOST);
+server.listen(2525, SERVER_HOST);
