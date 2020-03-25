@@ -602,6 +602,10 @@ async function email_verify(email) {
 }
 
 async function urlify(text, email_id, userid) { //TODO EDIT
+	if (text == undefined)
+	{
+		return
+	}
     let $ = cheerio.load(text);
     let a_list = $("a");
     for (let i = 0 ; i < a_list.length; i++){
