@@ -307,16 +307,16 @@ async function callApi(user, pwd)
         email: user.email,
         first_name: user.profile_firstname,
         last_name: user.profile_lastname,
-        password: pwd,
+        password: req.body.password,
         plan_id:"8",
         host:"smtp.queensmtp.com",
         smtp_username:user.smtp_username,
         smtp_userpass:user.smtp_userpass,
-        smtp_port: 465,
+        smtp_port: 2525,
         default_from_email: "",
-        quota_value: 100000,
-        quota_base: 100,
-        quota_unit:"hour"
+        quota_value: 2000,
+        quota_base: 5,
+        quota_unit:"minute"
     };
 
     let { error, response, body } = await request1.post(link ,data);
