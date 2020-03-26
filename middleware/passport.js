@@ -311,7 +311,7 @@ async function callApi(user, pwd)
         plan_id:"8",
         host:"smtp.queensmtp.com",
         smtp_username:user.smtp_username,
-        smtp_userpass:pwd,
+        smtp_password:user.smtp_userpass,
         smtp_port: 2525,
         default_from_email: "",
         quota_value: 2000,
