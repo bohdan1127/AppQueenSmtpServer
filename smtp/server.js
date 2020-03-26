@@ -40,8 +40,8 @@ const server = new SMTPServer({
     logger: true,
 
     secure: true,
-    //key: fs.readFileSync("./cert.key"),
-    //cert: fs.readFileSync("./app_queensmtp_com.crt"),
+    key: fs.readFileSync("cert.key"),
+    cert: fs.readFileSync("app_queensmtp_com.crt"),
     
     // not required but nice-to-have
     banner: 'Welcome to My Awesome SMTP Server',
