@@ -35,7 +35,7 @@ let is_running = false;
 const send_email = async () => {
     if (is_running == true)
     {
-	console.log('is_running true return');
+	console.log('true return');
         return;
     }
     is_running = true;
