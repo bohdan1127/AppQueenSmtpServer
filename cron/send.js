@@ -589,7 +589,8 @@ const send_email = async () => {
 
 };
 let cron_job = cron.job("* * * * * *", () => {
-    send_email();
+     console.log('Cron start');
+	send_email();
 });
 cron_job.start();
 
