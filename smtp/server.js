@@ -41,8 +41,8 @@ const server = new SMTPServer({
     logger: true,
 
     secure: true,
-    key: fs.readFileSync(path.resolve('../private.key')),
-    cert: fs.readFileSync(path.resolve('../server.crt')),
+    //key: fs.readFileSync(path.resolve('../private.key')),
+    //cert: fs.readFileSync(path.resolve('../server.crt')),
     
     // not required but nice-to-have
     banner: 'Welcome to My Awesome SMTP Server',
