@@ -57,4 +57,56 @@
     </form>
   </div>
 </div>
+<div class="container-fluid container-max">
+  <div class="container card-body col-md-12 col-sm-12">
+    <form action="/user/generate_pwd" method="POST" class="form-horizontal">
+      <div class="card" style="padding: 20px;  border-radius: 5px; border-top: 2px solid rgb(10, 168, 158);">
+        <div class="col-md-12">
+          <h4>Try smtp information below If don't work above smtp details .<h4><hr>
+        </div>
+        <div class="row">
+          <div class="col-md-3" style="margin-top: 20px;">
+            Host
+          </div>
+          <div class="col-md-9" style="margin-top: 20px; font-weight: bold;">
+            {{host}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3" style="margin-top: 20px;">
+            Port
+          </div>
+          <div class="col-md-9" style="margin-top: 20px; font-weight: bold;">
+            2525
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3" style="margin-top: 20px;">
+            Encryption
+          </div>
+          <div class="col-md-9" style="margin-top: 20px; font-weight: bold;">
+            None
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3" style="margin-top: 20px;">
+            Username
+          </div>
+          <div class="col-md-9" style="margin-top: 20px; font-weight: bold;">
+            {{username}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3" style="margin-top: 20px;">
+            Password
+          </div>
+          <div class="col-md-9" style="margin-top: 20px; font-weight: bold;">
+            {% if generated == true %} {{userpass}} {% endif %}<button type="submit" class="btn btn-primary">GENERATE SMTP PASSWORD </button>
+          </div>
+
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}
