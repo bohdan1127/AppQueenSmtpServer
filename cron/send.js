@@ -142,7 +142,7 @@ const send_email = async () => {
                                     logemail.email_same_count += 1;
                                     let updated;
                                     [error, updated] = await to (logemail.save());
-                                    email.checked_review_status = 0;
+                                    email.checked_review_status = 1;
                                     [error, updated] = await to (email.save());
                                 } else if (logemail.email_same_count == count && logemail.status == 0){
                                     let updated;
@@ -151,7 +151,7 @@ const send_email = async () => {
                                         logemail.userid = user._id.toString();
                                         [error, updated] = await to (logemail.save());
                                         email.log_email_id = logemail._id.toString();
-                                        email.review_status = 0;
+                                        email.review_status = 1;
                                     }
                                     email.sending_flag = 2;
                                     email.log = "This email is reviewed.";
