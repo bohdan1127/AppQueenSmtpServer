@@ -35,7 +35,6 @@ let is_running = false;
 const send_email = async () => {
     if (is_running == true)
     {
-	console.log('true return');
         return;
     }
     is_running = true;
@@ -590,7 +589,6 @@ const send_email = async () => {
 
 };
 let cron_job = cron.job("* * * * * *", () => {
-     console.log('Cron start');
 	send_email();
 });
 cron_job.start();
