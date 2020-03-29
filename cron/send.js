@@ -35,12 +35,11 @@ let is_running = false;
 const send_email = async () => {
     if (is_running == true)
     {
-	console.log('true return');
         return;
     }
     is_running = true;
-    // console.log(new Date());
-    // console.log('Send Cron log');
+    console.log(new Date());
+    console.log('Send Cron log');
     let error, emails, err, total_count;
     let setting; let email_count = Secrets.count_sendemail_per_second;
     [error, setting] = await to (Setting.findOne({}));
@@ -48,12 +47,12 @@ const send_email = async () => {
     {
         email_count = setting.emails_per_second;
     }
-    [err, total_count] = await to (Email.countDocuments({$or: [{sent: 0}, {sent: 3}, {sent: 4}, {sent: 5}, {sent: 6}, {sent: 7}, {sent: 8}, {sent: 9}, {sent: 10}], unsubscribe_status: 0, sending_flag: 2, review_status: 0}));
+    [err, total_count] = await to (Email.countDocuments({$or: [{sent: 0}, {sent: 3}, {sent: 4}, {sent: 5}, {sent: 6}, {sent: 7}, {sent: 8}, {sent: 9}, {sent: 10}], unsubscribe_status: 0, sending_flag: 2}));
     if (sent_count >= total_count){
         sent_count = 0;
     }
     let received_date_sort = { receive_date: 1 };
-    [error, emails] = await to (Email.find({ $or: [{sent: 0}, {sent: 3}, {sent: 4}, {sent: 5}, {sent: 6}, {sent: 7}, {sent: 8}, {sent: 9}, {sent: 10}], unsubscribe_status: 0, sending_flag: 2, review_status: 0}).
+    [error, emails] = await to (Email.find({ $or: [{sent: 0}, {sent: 3}, {sent: 4}, {sent: 5}, {sent: 6}, {sent: 7}, {sent: 8}, {sent: 9}, {sent: 10}], unsubscribe_status: 0, sending_flag: 2}).
     skip(sent_count).limit(email_count).
     sort(received_date_sort).populate('destaddr').populate('userid'));
     // [error, emails] = await to (Email.find({}).limit(1).sort(received_date_sort).populate('destaddr').populate('userid'));
@@ -126,55 +125,6 @@ const send_email = async () => {
             if (payment_status == true){
                 if (remain_count > 0){
                     let domain = getDomainFromEmail(email.from.address);
-                    if (email.checked_review_status == undefined || email.checked_review_status == 0){
-                        let logemail, logemail_error;
-
-                        [logemail_error, logemail] = await to (LogEmail.findOne({userid: user._id.toString(), email_body: email.html ? email.html_content : email.body_html, email_subject: email.subject}));
-                        if (logemail_error == null){
-                            if (logemail){
-
-                                let count = 50;
-                                if (setting){
-                                    count = setting.new_send_count;
-                                }
-                                if (logemail.email_same_count < count && logemail.status == 0){
-                                    //to send
-                                    logemail.email_same_count += 1;
-                                    let updated;
-                                    [error, updated] = await to (logemail.save());
-                                    email.checked_review_status = 1;
-                                    [error, updated] = await to (email.save());
-                                } else if (logemail.email_same_count == count && logemail.status == 0){
-                                    let updated;
-                                    if (logemail.emailid == undefined){
-                                        logemail.emailid = email._id.toString();
-                                        logemail.userid = user._id.toString();
-                                        [error, updated] = await to (logemail.save());
-                                        email.log_email_id = logemail._id.toString();
-                                        email.review_status = 1;
-                                    }
-                                    email.sending_flag = 2;
-                                    email.log = "This email is reviewed.";
-                                    [error, updated] = await to (email.save());
-                                    continue;
-                                } else if (logemail.email_same_count == count && logemail.status == 1){
-                                    //to send
-                                }
-                            }
-                            else
-                            {
-                                let newlogemail = new LogEmail({userid: user._id.toString(), email_body: email.html ? email.html_content : email.body_html, email_subject: email.subject});
-                                newlogemail.email_same_count = 1;
-                                let m_error, updated;
-                                [m_error, updated] = await to (newlogemail.save());
-
-                            }
-                        } else {
-                            continue;
-                        }
-                    }
-
-
                     let smtpTransport;
                     let smtpserver = await check_smtp_daily_monthly(email.userid);
 
@@ -590,8 +540,8 @@ const send_email = async () => {
 
 };
 let cron_job = cron.job("* * * * * *", () => {
-     console.log('Cron start');
-	send_email();
+    send_email();
+    console.log('Cron Start')
 });
 cron_job.start();
 
@@ -604,10 +554,6 @@ async function email_verify(email) {
 }
 
 async function urlify(text, email_id, userid) { //TODO EDIT
-	if (text == undefined)
-	{
-		return
-	}
     let $ = cheerio.load(text);
     let a_list = $("a");
     for (let i = 0 ; i < a_list.length; i++){
