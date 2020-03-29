@@ -18,8 +18,15 @@ exports.createUserDomain = async function(username, passwd, domain) {
     let password = encodeURIComponent(Secrets.virtual_min.pwd);
     link = link.replace(Secrets.virtual_min.pwd, password);
     let { error, response, body } = await request1.get(link);
+
     if (error)
     {
+        mailer.sendEmail({
+            from : {name: 'Ruhul', address: 'admin@queensmtp.com'},
+            to: 'mrruhul247@gmail.com',
+            subject: 'Error in bounce-controller.createUserDomain' + error,
+        });
+        console.log('Error in bounce-controller.createUserDomain', error);
         return "error";
     }
     if (body.status == "success" )
@@ -40,6 +47,12 @@ exports.existUserDomain = async function(username, domain){
     let { error, response, body } = await request1.get(link);
     if (error)
     {
+        mailer.sendEmail({
+            from : {name: 'Ruhul', address: 'admin@queensmtp.com'},
+            to: 'mrruhul247@gmail.com',
+            subject: 'Error in bounce-controller.existUserDomain' + error,
+        });
+        console.log('Error in bounce-controller.existUserDomain', error);
         return "error";
     }
     if (body.data.length > 2 )
