@@ -21,11 +21,7 @@ exports.createUserDomain = async function(username, passwd, domain) {
 
     if (error)
     {
-        mailer.sendEmail({
-            from : {name: 'Ruhul', address: 'admin@queensmtp.com'},
-            to: 'mrruhul247@gmail.com',
-            subject: 'Error in bounce-controller.createUserDomain' + error,
-        });
+    
         console.log('Error in bounce-controller.createUserDomain', error);
         return "error";
     }
