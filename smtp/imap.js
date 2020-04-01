@@ -16,6 +16,7 @@ module.exports.BounceEmailListener = class BounceEmailListener
 {
     constructor(bounceid) {
         this.bounceid = bounceid;
+        this.error = null;
     }
     async init()
     {
@@ -58,7 +59,6 @@ module.exports.BounceEmailListener = class BounceEmailListener
         });
 
         this.serverConnected = false;
-
         //this.mailListener.start();
 
         this.mailListener.on("server:connected", function(){
@@ -141,6 +141,10 @@ module.exports.BounceEmailListener = class BounceEmailListener
         return this.serverConnected;
     }
 
+    getError()
+    {
+        return this.error;
+    }
     startImap()
     {
         if (!this.serverConnected)

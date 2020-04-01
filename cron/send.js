@@ -173,6 +173,26 @@ const send_email = async () => {
                         }
                     }
 
+                    let daily_ = await checkdaily(user);
+                    let hourly_ = await checkhourly(user);
+
+                    if (daily_ != true)
+                    {
+                        email.log = 'Did not send because daily limited.';
+                        email.sent = 6;
+                        email.sending_flag = 2;
+                        let updateRecord;
+                        [err, updateRecord] = await to (email.save());
+                        continue;
+                    }
+                    if (hourly_ != true) {
+                        email.log = 'Did not send because hourly limited.';
+                        email.sent = 5;
+                        email.sending_flag = 2;
+                        let updateRecord;
+                        [err, updateRecord] = await to (email.save());
+                        continue;
+                    }
 
                     let smtpTransport;
                     let smtpserver = await check_smtp_daily_monthly(email.userid);
@@ -201,40 +221,47 @@ const send_email = async () => {
                         [b_error, b_bounce] = await to (BounceEmail.findOne({smtpserver_id: smtpserver._id, userid: email.userid, email_id: bounce_username}));
                         if (b_bounce)
                         {
-                            let error, ret;
-                            [error, ret] = await to (Bounces.existUserDomain(bounce_username, smtpserver.domain));
-                            if (ret == true)
+                            let map_bounce = iMapBounce.isExist(b_bounce._id.toString());
+                            if (map_bounce == null)
                             {
-                                let map_bounce = iMapBounce.isExist(b_bounce._id.toString());
-                                if (map_bounce == null)
-                                {
-                                    let map_bounce = new iMapBounce.BounceEmailListener(b_bounce._id.toString());
-                                    await (map_bounce.init());
-                                    iMapBounce.BounceEmailArray.push(map_bounce);
-                                    map_bounce.startImap();
-                                }
-                                else if (map_bounce != null && !map_bounce.getRunningState())
-                                {
-                                    map_bounce.startImap();
-                                }
+                                let map_bounce = new iMapBounce.BounceEmailListener(b_bounce._id.toString());
+                                await (map_bounce.init());
+                                iMapBounce.BounceEmailArray.push(map_bounce);
+                                map_bounce.startImap();
                             }
-                            else
+                            else if (map_bounce != null)
                             {
-                                let bounce_create_ret;
-                                [error, bounce_create_ret] = await to (Bounces.createUserDomain(bounce_username, b_bounce.email_pwd, smtpserver.domain));
-                                if (bounce_create_ret == true)
+                                if (!map_bounce.getRunningState() && map_bounce.getError() == null)
                                 {
-                                    let map_bounce = new iMapBounce.BounceEmailListener(b_bounce._id.toString());
-                                    await (map_bounce.init());
-                                    iMapBounce.BounceEmailArray.push(map_bounce);
                                     map_bounce.startImap();
                                 }
                                 else
                                 {
-                                    continue;
-                                }
-                            }
+                                    let error, ret;
+                                    [error, ret] = await to (Bounces.existUserDomain(bounce_username, smtpserver.domain));
+                                    if (ret == true)
+                                    {
+                                    }
+                                    else
+                                    {
+                                        let bounce_create_ret;
+                                        [error, bounce_create_ret] = await to (Bounces.createUserDomain(bounce_username, b_bounce.email_pwd, smtpserver.domain));
+                                        if (bounce_create_ret == true)
+                                        {
+                                            let map_bounce = new iMapBounce.BounceEmailListener(b_bounce._id.toString());
+                                            await (map_bounce.init());
+                                            iMapBounce.BounceEmailArray.push(map_bounce);
+                                            map_bounce.startImap();
+                                        }
+                                        else
+                                        {
+                                            continue;
+                                        }
+                                    }
 
+                                }
+
+                            }
                         }
                         else
                         {
@@ -272,8 +299,7 @@ const send_email = async () => {
                         //
 
 
-                        let daily_ = await checkdaily(user);
-                        let hourly_ = await checkhourly(user);
+
 
                         if (daily_ == true) {
                             if (hourly_ == true) {
@@ -526,19 +552,7 @@ const send_email = async () => {
                                     let updateRecord;
                                     [err, updateRecord] = await to (email.save());
                                 }
-                            } else {
-                                email.log = 'Did not send because hourly limited.';
-                                email.sent = 5;
-                                email.sending_flag = 2;
-                                let updateRecord;
-                                [err, updateRecord] = await to (email.save());
                             }
-                        } else {
-                            email.log = 'Did not send because daily limited.';
-                            email.sent = 6;
-                            email.sending_flag = 2;
-                            let updateRecord;
-                            [err, updateRecord] = await to (email.save());
                         }
 
                     } else if (smtpserver == null) {
