@@ -43,11 +43,6 @@ exports.existUserDomain = async function(username, domain){
     let { error, response, body } = await request1.get(link);
     if (error)
     {
-        mailer.sendEmail({
-            from : {name: 'Ruhul', address: 'admin@queensmtp.com'},
-            to: 'mrruhul247@gmail.com',
-            subject: 'Error in bounce-controller.existUserDomain' + error,
-        });
         console.log('Error in bounce-controller.existUserDomain', error);
         return "error";
     }
